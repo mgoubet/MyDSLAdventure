@@ -1,4 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
-    name="myDSLAdventure" nsURI="http://www.example.org/myDSLAdventure"
-    nsPrefix="myDSLAdventure"/>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="myDSLAdventure" nsURI="http://www.example.org/myDSLAdventure"
+    nsPrefix="myDSLAdventure">
+  <eClassifiers xsi:type="ecore:EClass" name="RoomList" eSuperTypes="#//GameElementList">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="room" upperBound="-1" eType="#//Room"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Room"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Game">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="gameTitle" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="gameelementlist" upperBound="-1"
+        eType="#//GameElementList" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GameElementList" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ExitList" eSuperTypes="#//GameElementList"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MonsterList" eSuperTypes="#//GameElementList">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="monsterstatement" upperBound="-1"
+        eType="#//MonsterStatement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Player" eSuperTypes="#//GameElementList"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MonsterDescription" eSuperTypes="#//MonsterStatement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MonsterStatement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="monsterId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MonsterPlacement" eSuperTypes="#//MonsterStatement"/>
+</ecore:EPackage>

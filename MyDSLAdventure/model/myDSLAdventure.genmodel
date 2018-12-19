@@ -1,11 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/MyDSLAdventure/src-gen" creationIcons="false"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel"
+    modelDirectory="/MyDSLAdventure/src-gen" creationIcons="false"
     editDirectory="/MyDSLAdventure.edit/src-gen" editorDirectory="/MyDSLAdventure.editor/src-gen"
     modelPluginID="MyDSLAdventure" modelName="MyDSLAdventure" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     codeFormatting="true" importerID="org.eclipse.emf.importer.ecore" complianceLevel="8.0"
     copyrightFields="false" operationReflection="true" importOrganizing="true">
   <foreignModel>myDSLAdventure.ecore</foreignModel>
   <testsDirectory xsi:nil="true"/>
-  <genPackages prefix="MyDSLAdventure" disposableProviderFactory="true" ecorePackage="myDSLAdventure.ecore#/"/>
+  <genPackages prefix="MyDSLAdventure" disposableProviderFactory="true" ecorePackage="myDSLAdventure.ecore#/">
+    <genClasses ecoreClass="myDSLAdventure.ecore#//RoomList">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference myDSLAdventure.ecore#//RoomList/room"/>
+    </genClasses>
+    <genClasses ecoreClass="myDSLAdventure.ecore#//Room"/>
+    <genClasses ecoreClass="myDSLAdventure.ecore#//Game">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute myDSLAdventure.ecore#//Game/gameTitle"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference myDSLAdventure.ecore#//Game/gameelementlist"/>
+    </genClasses>
+    <genClasses ecoreClass="myDSLAdventure.ecore#//GameElementList"/>
+    <genClasses ecoreClass="myDSLAdventure.ecore#//ExitList"/>
+    <genClasses ecoreClass="myDSLAdventure.ecore#//MonsterList">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference myDSLAdventure.ecore#//MonsterList/monsterstatement"/>
+    </genClasses>
+    <genClasses ecoreClass="myDSLAdventure.ecore#//Player"/>
+    <genClasses ecoreClass="myDSLAdventure.ecore#//MonsterDescription"/>
+    <genClasses ecoreClass="myDSLAdventure.ecore#//MonsterStatement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute myDSLAdventure.ecore#//MonsterStatement/monsterId"/>
+    </genClasses>
+    <genClasses ecoreClass="myDSLAdventure.ecore#//MonsterPlacement"/>
+  </genPackages>
 </genmodel:GenModel>
