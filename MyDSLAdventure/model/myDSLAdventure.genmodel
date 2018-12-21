@@ -12,21 +12,52 @@
     <genClasses ecoreClass="myDSLAdventure.ecore#//RoomList">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference myDSLAdventure.ecore#//RoomList/room"/>
     </genClasses>
-    <genClasses ecoreClass="myDSLAdventure.ecore#//Room"/>
+    <genClasses ecoreClass="myDSLAdventure.ecore#//RoomId">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute myDSLAdventure.ecore#//RoomId/roomId"/>
+    </genClasses>
     <genClasses ecoreClass="myDSLAdventure.ecore#//Game">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute myDSLAdventure.ecore#//Game/gameTitle"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference myDSLAdventure.ecore#//Game/gameelementlist"/>
     </genClasses>
     <genClasses ecoreClass="myDSLAdventure.ecore#//GameElementList"/>
-    <genClasses ecoreClass="myDSLAdventure.ecore#//ExitList"/>
+    <genClasses ecoreClass="myDSLAdventure.ecore#//ExitList">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference myDSLAdventure.ecore#//ExitList/room"/>
+    </genClasses>
     <genClasses ecoreClass="myDSLAdventure.ecore#//MonsterList">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference myDSLAdventure.ecore#//MonsterList/monsterstatement"/>
     </genClasses>
-    <genClasses ecoreClass="myDSLAdventure.ecore#//Player"/>
-    <genClasses ecoreClass="myDSLAdventure.ecore#//MonsterDescription"/>
+    <genClasses ecoreClass="myDSLAdventure.ecore#//Player">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference myDSLAdventure.ecore#//Player/startRoom"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute myDSLAdventure.ecore#//Player/healthPoints"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference myDSLAdventure.ecore#//Player/weaponid"/>
+    </genClasses>
+    <genClasses ecoreClass="myDSLAdventure.ecore#//MonsterDescription">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute myDSLAdventure.ecore#//MonsterDescription/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute myDSLAdventure.ecore#//MonsterDescription/baseDamage"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute myDSLAdventure.ecore#//MonsterDescription/baseWeaponName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference myDSLAdventure.ecore#//MonsterDescription/weapon"/>
+    </genClasses>
     <genClasses ecoreClass="myDSLAdventure.ecore#//MonsterStatement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute myDSLAdventure.ecore#//MonsterStatement/monsterId"/>
     </genClasses>
-    <genClasses ecoreClass="myDSLAdventure.ecore#//MonsterPlacement"/>
+    <genClasses ecoreClass="myDSLAdventure.ecore#//MonsterPlacement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference myDSLAdventure.ecore#//MonsterPlacement/room"/>
+    </genClasses>
+    <genClasses ecoreClass="myDSLAdventure.ecore#//WeaponList">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference myDSLAdventure.ecore#//WeaponList/weapon"/>
+    </genClasses>
+    <genClasses ecoreClass="myDSLAdventure.ecore#//Weapon">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute myDSLAdventure.ecore#//Weapon/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute myDSLAdventure.ecore#//Weapon/damage"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference myDSLAdventure.ecore#//Weapon/weaponid"/>
+    </genClasses>
+    <genClasses ecoreClass="myDSLAdventure.ecore#//Room">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute myDSLAdventure.ecore#//Room/description"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference myDSLAdventure.ecore#//Room/roomid"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute myDSLAdventure.ecore#//Room/roomName"/>
+    </genClasses>
+    <genClasses ecoreClass="myDSLAdventure.ecore#//WeaponId">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute myDSLAdventure.ecore#//WeaponId/weaponId"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>
