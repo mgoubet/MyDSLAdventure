@@ -35,7 +35,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute myDSLAdventure.ecore#//MonsterDescription/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute myDSLAdventure.ecore#//MonsterDescription/baseDamage"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute myDSLAdventure.ecore#//MonsterDescription/baseWeaponName"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference myDSLAdventure.ecore#//MonsterDescription/weapon"/>
     </genClasses>
     <genClasses ecoreClass="myDSLAdventure.ecore#//MonsterStatement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute myDSLAdventure.ecore#//MonsterStatement/monsterId"/>
@@ -58,6 +57,9 @@
     </genClasses>
     <genClasses ecoreClass="myDSLAdventure.ecore#//WeaponId">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute myDSLAdventure.ecore#//WeaponId/weaponId"/>
+    </genClasses>
+    <genClasses ecoreClass="myDSLAdventure.ecore#//MonsterEquipment">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference myDSLAdventure.ecore#//MonsterEquipment/weapon"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>
