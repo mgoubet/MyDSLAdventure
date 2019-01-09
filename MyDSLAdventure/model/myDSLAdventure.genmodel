@@ -54,12 +54,18 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute myDSLAdventure.ecore#//Room/description"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference myDSLAdventure.ecore#//Room/roomid"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute myDSLAdventure.ecore#//Room/roomName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference myDSLAdventure.ecore#//Room/exits"/>
     </genClasses>
     <genClasses ecoreClass="myDSLAdventure.ecore#//WeaponId">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute myDSLAdventure.ecore#//WeaponId/weaponId"/>
     </genClasses>
     <genClasses ecoreClass="myDSLAdventure.ecore#//MonsterEquipment">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference myDSLAdventure.ecore#//MonsterEquipment/weapon"/>
+    </genClasses>
+    <genClasses ecoreClass="myDSLAdventure.ecore#//Exit">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute myDSLAdventure.ecore#//Exit/description"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute myDSLAdventure.ecore#//Exit/action"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference myDSLAdventure.ecore#//Exit/goto"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

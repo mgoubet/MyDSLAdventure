@@ -57,12 +57,24 @@ Room returns Room:
 		roomName=EString
 		'id:' roomid=RoomId
 		'presentation' description=EString
+		('exits'
+			exits+=Exit
+			( exits+=Exit )*
+		)?
 	;
 
 RoomId returns RoomId:
 	{RoomId}
 		roomId=EString
 	;
+
+Exit returns Exit:
+	{Exit}
+	'->'
+		description=EString
+		'with' action=EString
+		'goto' goto=RoomId
+;
 
 MonsterDescription returns MonsterDescription:
 	{MonsterDescription}
