@@ -23,6 +23,7 @@ import myDSLAdventure.Room
 import myDSLAdventure.RoomId
 import myDSLAdventure.WeaponId
 import myDSLAdventure.MonsterStatement
+import java.util.List
 
 /**
  * Generates code from your model files on save.
@@ -32,10 +33,21 @@ import myDSLAdventure.MonsterStatement
 class RPGGenerator extends AbstractGenerator {
 	
 	Player player;
+	List<RoomList> rooms;
+	ExitList gameExits;
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 		fsa.generateFile(resource.URI.trimFileExtension.appendFileExtension("aslx").lastSegment, 
 			resource.allContents.filter(Game).toIterable.head.compile.toString);
+	}
+	
+	def findRoom(RoomId id) {
+		for (list : rooms) {
+			for (room : list.room) {
+				if (room.roomid.roomId.equals(id.roomId))
+					return room;
+			}
+		}
 	}
 	
 	def dispatch compile(MonsterList monsterList) '''TODO'''
@@ -72,7 +84,7 @@ class RPGGenerator extends AbstractGenerator {
 	def dispatch compile(MonsterPlacement monsterList) '''TODO'''
 	
 	def dispatch compile(Exit exit) '''
-		<exit alias="« exit.action »" to="« exit.goto »">
+		<exit alias="« exit.action »" to="« findRoom(exit.goto).roomName »">
 			<message>« exit.description »</message>
 		</exit>
 	'''
@@ -90,6 +102,17 @@ class RPGGenerator extends AbstractGenerator {
 			«FOR exit : room.exits»
 				« exit.compile »
 			«ENDFOR»
+			«FOR gameExit : gameExits.room»
+				«IF gameExit.roomId.equals(room.roomid.roomId)»
+					<exit alias="exitName">
+						<runscript />
+						<script type="script">
+							msg(You did great, you are so awesome, well done. See you next time)
+							finish
+						</script>
+					</exit>
+				«ENDIF»
+			«ENDFOR»
 			«IF player.startRoom.roomId.equals(room.roomid.roomId) »
 				« player.compile »
 			«ENDIF»
@@ -103,6 +126,8 @@ class RPGGenerator extends AbstractGenerator {
 	def dispatch compile(Game game) {
 	
 	this.player = game.gameelementlist.filter(Player).get(0);
+	this.rooms = game.gameelementlist.filter(RoomList).toList();
+	this.gameExits = game.gameelementlist.filter(ExitList).get(0);
 	
 	'''
 	<asl version="580">
