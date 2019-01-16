@@ -24,6 +24,7 @@ import myDSLAdventure.RoomId
 import myDSLAdventure.WeaponId
 import myDSLAdventure.MonsterStatement
 import java.util.List
+import java.util.ArrayList
 
 /**
  * Generates code from your model files on save.
@@ -35,8 +36,8 @@ class RPGGenerator extends AbstractGenerator {
 	Player player;
 	List<RoomList> rooms;
 	ExitList gameExits;
-	List<MonsterDescription> monsters;
-	List<MonsterPlacement> monsterPlacements;
+	List<MonsterDescription> monsters = new ArrayList<MonsterDescription>();
+	List<MonsterPlacement> monsterPlacements = new ArrayList<MonsterPlacement>();
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 		fsa.generateFile(resource.URI.trimFileExtension.appendFileExtension("aslx").lastSegment, 
@@ -51,19 +52,13 @@ class RPGGenerator extends AbstractGenerator {
 			}
 		}
 	}
-	
-	def dispatch compile(MonsterList monsterList) '''
-		«FOR room : monsterList.monsterstatement»
-			« room.compile »
-		«ENDFOR»
-	'''
-	
+		
 	def dispatch compile(RoomList rooms) '''
 		«FOR room : rooms.room»
 			« room.compile »
 		«ENDFOR»
 	'''
-	def dispatch compile(WeaponList monsterList) '''TODO'''
+	def dispatch compile(WeaponList monsterList) ''''''
 
 	def dispatch compile(Player player) '''
 		<object name="player">
@@ -72,19 +67,33 @@ class RPGGenerator extends AbstractGenerator {
 	    </object>	
 	'''	
 	
-	def dispatch compile(GameElementList monsterList) '''TODO'''
-	def dispatch compile(MonsterStatement monsterList) '''TODO'''
+	def dispatch compile(GameElementList monsterList) ''''''
+	def dispatch compile(MonsterStatement monsterList) ''''''
 	
 	def dispatch compile(MonsterDescription monster) '''
-			<object name="player">
+			<object name="«monster.monsterId»">
 		      <inherit name="editor_object" />
 		      <alias>«monster.name»</alias>
-		      <attack>«monster.baseWeaponName»<attack>
-		    </object>		
+		      <displayverbs type="stringlist" />
+		      <health type="int">10</health>
+		      <attack type="script"><![CDATA[
+		      	this.health = this.health - « 2 »
+				msg("You inflict « -2 »HP to « monster.name »")
+		      	if (this.health <= 0) {
+		      		RemoveObject(«monster.monsterId»)
+		      		msg("You kill « monster.name »")
+		      	}
+		      	else {
+			      	msg("« monster.name » uses « monster.baseWeaponName »")
+			      	msg("You lost « monster.baseDamage » HP")
+			      	DecreaseHealth(« monster.baseDamage * 100 / player.healthPoints »)
+		      	}
+		      ]]>
+		      </attack>
+		    </object>
 	'''
 
 	def dispatch compile(MonsterEquipment monsterList) '''TODO'''
-	def dispatch compile(MonsterPlacement monsterList) '''TODO'''
 	
 	def dispatch compile(Exit exit) '''
 		<exit alias="« exit.action »" to="« findRoom(exit.goto).roomName »">
@@ -128,17 +137,19 @@ class RPGGenerator extends AbstractGenerator {
 	'''
 	
 	
-	def dispatch compile(WeaponId monsterList) '''TODO'''
-	def dispatch compile(Weapon monsterList) '''TODO'''
+	def dispatch compile(WeaponId monsterList) ''''''
+	def dispatch compile(Weapon monsterList) ''''''
 	
 	def dispatch compile(Game game) {
 	
 	this.player = game.gameelementlist.filter(Player).get(0);
 	this.rooms = game.gameelementlist.filter(RoomList).toList();
 	this.gameExits = game.gameelementlist.filter(ExitList).get(0);
-	this.monsters = game.gameelementlist.filter(MonsterDescription).toList();
-	this.monsterPlacements = game.gameelementlist.filter(MonsterPlacement).toList();
 	
+	for (MonsterList list : game.gameelementlist.filter(MonsterList).toList()) {
+		this.monsterPlacements.addAll(list.monsterstatement.filter(MonsterPlacement).toList());
+		this.monsters.addAll(list.monsterstatement.filter(MonsterDescription).toList());
+	}
 	
 	'''
 	<asl version="580">
@@ -158,6 +169,11 @@ class RPGGenerator extends AbstractGenerator {
 	    	finish
 	    </onhealthzero>
 	  </game>
+	  <verb>
+	  	<property>attack</property>
+	  	<pattern>attack</pattern>
+	  	<defaultexpression>"Thou shall not attack " + object.article + "."</defaultexpression>
+	  </verb>
 	
 		 «FOR elem : game.gameelementlist.filter(RoomList) »
 			« elem.compile »
@@ -165,9 +181,6 @@ class RPGGenerator extends AbstractGenerator {
 	 	 «FOR elem : game.gameelementlist.filter(WeaponList) »
 	 		« elem.compile »
 	 	 «ENDFOR»
- 	 	 «FOR elem : game.gameelementlist.filter(MonsterList) »
- 	 		« elem.compile »
- 	 	 «ENDFOR»
 	
 	</asl>
 	
