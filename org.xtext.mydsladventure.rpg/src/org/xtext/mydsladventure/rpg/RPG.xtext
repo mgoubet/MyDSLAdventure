@@ -16,7 +16,7 @@ GameElementList returns GameElementList:
 
 
 MonsterStatement returns MonsterStatement:
-	MonsterDescription | MonsterPlacement | MonsterEquipment;
+	Monster | MonsterPlacement | MonsterEquipment;
 
 
 RoomList returns RoomList:
@@ -27,7 +27,7 @@ RoomList returns RoomList:
 
 ExitList returns ExitList:
 	'Exits' 'in'
-		room+=RoomId ( "or" room+=RoomId)* 
+		room+=[Room] ( "or" room+=[Room])* 
 	;
 
 MonsterList returns MonsterList:
@@ -37,12 +37,9 @@ MonsterList returns MonsterList:
 	;
 
 Player returns Player:
-	'Player' 'starts' 'in'
-		startRoom=RoomId
-		'with'
-		healthPoints=EInt
-		'health'
-		('and' weaponid=WeaponId)?
+	'Player' 'starts' 'in' startRoom=[Room]
+		'with' healthPoints=EInt 'health'
+		('and' weapon=[Weapon])?
 	;
 
 WeaponList returns WeaponList:
@@ -53,9 +50,7 @@ WeaponList returns WeaponList:
 
 Room returns Room:
 	{Room}
-	'Room'
-		roomName=EString
-		'id:' roomid=RoomId
+	'Room' name=ID fullName=EString
 		'presentation' description=EString
 		('exits'
 			exits+=Exit
@@ -63,43 +58,33 @@ Room returns Room:
 		)?
 	;
 
-RoomId returns RoomId:
-	{RoomId}
-		roomId=EString
-	;
-
 Exit returns Exit:
 	{Exit}
 	'->'
 		description=EString
 		'with' action=EString
-		'goto' goto=RoomId
+		'goto' goto=[Room]
 ;
 
-MonsterDescription returns MonsterDescription:
-	{MonsterDescription}
-	'monster' monsterId=EString
-	name=EString
-	'attacks' 'for' baseDamage=EInt 'damage' 'with' baseWeaponName=EString
+Monster returns Monster:
+	{Monster}
+	'monster' name=ID fullName=EString
+		'with' health=EInt 'health'
+		'attacks' 'for' baseDamage=EInt 'damage'
+		'with' baseWeaponName=EString
 	;
 
 MonsterPlacement returns MonsterPlacement:
-	'put' monsterId=EString 'in' room=RoomId
+	'put' monster=[Monster] 'in' room=[Room]
 	;
 	
 MonsterEquipment returns MonsterEquipment:
-	'give' monsterId=EString 'weapon' weapon=WeaponId
-	;
-
-WeaponId returns WeaponId:
-	{WeaponId}
-		weaponId=EString
+	'give' monster=[Monster] 'weapon' weapon=[Weapon]
 	;
 
 Weapon returns Weapon:
-	'weapon' weaponid=WeaponId
-	name=EString
-	'attacks' 'for' damage=EInt 'damage'
+	'weapon' name=ID fullName=EString
+		'attacks' 'for' damage=EInt 'damage'
 	;
 
 EString returns ecore::EString:
