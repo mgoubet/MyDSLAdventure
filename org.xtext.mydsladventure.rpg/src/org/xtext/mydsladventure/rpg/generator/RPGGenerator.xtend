@@ -70,12 +70,7 @@ class RPGGenerator extends AbstractGenerator {
 	      <inherit name="editor_object" />
 	      <inherit name="editor_player" />
 	    </object>	
-	'''
-	
-	def dispatch compile(ExitList monsterList) '''
-	TODO
-	'''
-	
+	'''	
 	
 	def dispatch compile(GameElementList monsterList) '''TODO'''
 	def dispatch compile(MonsterStatement monsterList) '''TODO'''
@@ -112,13 +107,9 @@ class RPGGenerator extends AbstractGenerator {
 			«ENDFOR»
 			«FOR gameExit : gameExits.room»
 				«IF gameExit.roomId.equals(room.roomid.roomId)»
-					<exit alias="exitName">
-						<runscript />
-						<script type="script">
-							msg(You did great, you are so awesome, well done. See you next time)
-							finish
-						</script>
-					</exit>
+					<enter type="script">
+						finish
+					</enter>
 				«ENDIF»
 			«ENDFOR»
 			«IF player.startRoom.roomId.equals(room.roomid.roomId) »
