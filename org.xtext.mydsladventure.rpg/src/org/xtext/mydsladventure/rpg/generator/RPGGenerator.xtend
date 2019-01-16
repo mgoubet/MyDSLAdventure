@@ -34,7 +34,7 @@ class RPGGenerator extends AbstractGenerator {
 	Player player;
 	List<RoomList> rooms;
 	ExitList gameExits;
-	List<MonsterDescription> monsters = new ArrayList<MonsterDescription>();
+	List<Monster> monsters = new ArrayList<Monster>();
 	List<MonsterPlacement> monsterPlacements = new ArrayList<MonsterPlacement>();
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
@@ -42,10 +42,10 @@ class RPGGenerator extends AbstractGenerator {
 			resource.allContents.filter(Game).toIterable.head.compile.toString);
 	}
 	
-	def findRoom(RoomId id) {
+	def findRoom(String id) {
 		for (list : rooms) {
 			for (room : list.room) {
-				if (room.roomid.roomId.equals(id.roomId))
+				if (room.name.equals(id))
 					return room;
 			}
 		}
@@ -68,21 +68,21 @@ class RPGGenerator extends AbstractGenerator {
 	def dispatch compile(GameElementList monsterList) ''''''
 	def dispatch compile(MonsterStatement monsterList) ''''''
 	
-	def dispatch compile(MonsterDescription monster) '''
-			<object name="«monster.monsterId»">
+	def dispatch compile(Monster monster) '''
+			<object name="«monster.name»">
 		      <inherit name="editor_object" />
-		      <alias>«monster.name»</alias>
+		      <alias>«monster.fullName»</alias>
 		      <displayverbs type="stringlist" />
-		      <health type="int">10</health>
+		      <health type="int">« monster.health »</health>
 		      <attack type="script"><![CDATA[
 		      	this.health = this.health - « 2 »
-				msg("You inflict « -2 »HP to « monster.name »")
+				msg("You inflict « -2 »HP to « monster.fullName »")
 		      	if (this.health <= 0) {
-		      		RemoveObject(«monster.monsterId»)
-		      		msg("You kill « monster.name »")
+		      		RemoveObject(«monster.name»)
+		      		msg("You kill « monster.fullName »")
 		      	}
 		      	else {
-			      	msg("« monster.name » uses « monster.baseWeaponName »")
+			      	msg("« monster.fullName » uses « monster.baseWeaponName »")
 			      	msg("You lost « monster.baseDamage » HP")
 			      	DecreaseHealth(« monster.baseDamage * 100 / player.healthPoints »)
 		      	}
@@ -122,9 +122,9 @@ class RPGGenerator extends AbstractGenerator {
 				« player.compile »
 			«ENDIF»
 			«FOR placement: monsterPlacements »
-				«IF placement.room.roomId.equals(room.roomid.roomId)»
+				«IF placement.room.equals(room)»
 					«FOR monster: monsters»
-						«IF monster.monsterId.equals(placement.monsterId)»
+						«IF monster.equals(placement.monster)»
 							« monster.compile »
 						«ENDIF»
 					«ENDFOR»
@@ -143,7 +143,7 @@ class RPGGenerator extends AbstractGenerator {
 	
 	for (MonsterList list : game.gameelementlist.filter(MonsterList).toList()) {
 		this.monsterPlacements.addAll(list.monsterstatement.filter(MonsterPlacement).toList());
-		this.monsters.addAll(list.monsterstatement.filter(MonsterDescription).toList());
+		this.monsters.addAll(list.monsterstatement.filter(Monster).toList());
 	}
 	
 	'''
