@@ -62,12 +62,6 @@ class RPGGenerator extends AbstractGenerator {
 		<object name="player">
 	      <inherit name="editor_object" />
 	      <inherit name="editor_player" />
-	      <statusattributes type="stringdictionary">
-	        <item>
-	          <key>health</key>
-	          <value>« player.healthPoints »</value>
-	        </item>
-	      </statusattributes>
 	    </object>	
 	'''
 	
@@ -137,6 +131,12 @@ class RPGGenerator extends AbstractGenerator {
 	    <gameid>3a5e3f9b-f412-4085-b1c1-06d83237d484</gameid>
 	    <version>1.0</version>
 	    <firstpublished>2019</firstpublished>
+	    <showhealth />
+	    <turnoffcompass />
+	    <onhealthzero type="script">
+	    	msg("WASTED")
+	    	finish
+	    </onhealthzero>
 	  </game>
 	
 		 «FOR elem : game.gameelementlist.filter(RoomList) »
