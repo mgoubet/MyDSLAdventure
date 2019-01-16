@@ -151,7 +151,10 @@ class RPGGenerator extends AbstractGenerator {
 	    <showhealth />
 	    <turnoffcompass />
 	    <onhealthzero type="script">
-	    	msg("WASTED")
+	    	SetBackgroundColour ("Gray")
+	    	SetForegroundColour ("Red")
+	    	SetFontSize (32)
+	    	PrintCentered("WASTED")
 	    	finish
 	    </onhealthzero>
 	  </game>
