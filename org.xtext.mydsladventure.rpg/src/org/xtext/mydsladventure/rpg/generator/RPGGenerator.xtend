@@ -35,6 +35,8 @@ class RPGGenerator extends AbstractGenerator {
 	Player player;
 	List<RoomList> rooms;
 	ExitList gameExits;
+	List<MonsterDescription> monsters;
+	List<MonsterPlacement> monsterPlacements;
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 		fsa.generateFile(resource.URI.trimFileExtension.appendFileExtension("aslx").lastSegment, 
@@ -50,7 +52,12 @@ class RPGGenerator extends AbstractGenerator {
 		}
 	}
 	
-	def dispatch compile(MonsterList monsterList) '''TODO'''
+	def dispatch compile(MonsterList monsterList) '''
+		«FOR room : monsterList.monsterstatement»
+			« room.compile »
+		«ENDFOR»
+	'''
+	
 	def dispatch compile(RoomList rooms) '''
 		«FOR room : rooms.room»
 			« room.compile »
@@ -73,7 +80,14 @@ class RPGGenerator extends AbstractGenerator {
 	def dispatch compile(GameElementList monsterList) '''TODO'''
 	def dispatch compile(MonsterStatement monsterList) '''TODO'''
 	
-	def dispatch compile(MonsterDescription monsterList) '''TODO'''
+	def dispatch compile(MonsterDescription monster) '''
+			<object name="player">
+		      <inherit name="editor_object" />
+		      <alias>«monster.name»</alias>
+		      <attack>«monster.baseWeaponName»<attack>
+		    </object>		
+	'''
+
 	def dispatch compile(MonsterEquipment monsterList) '''TODO'''
 	def dispatch compile(MonsterPlacement monsterList) '''TODO'''
 	
@@ -110,6 +124,15 @@ class RPGGenerator extends AbstractGenerator {
 			«IF player.startRoom.roomId.equals(room.roomid.roomId) »
 				« player.compile »
 			«ENDIF»
+			«FOR placement: monsterPlacements »
+				«IF placement.room.roomId.equals(room.roomid.roomId)»
+					«FOR monster: monsters»
+						«IF monster.monsterId.equals(placement.monsterId)»
+							« monster.compile »
+						«ENDIF»
+					«ENDFOR»
+				«ENDIF»
+			«ENDFOR»
 		  </object>
 	'''
 	
@@ -122,6 +145,9 @@ class RPGGenerator extends AbstractGenerator {
 	this.player = game.gameelementlist.filter(Player).get(0);
 	this.rooms = game.gameelementlist.filter(RoomList).toList();
 	this.gameExits = game.gameelementlist.filter(ExitList).get(0);
+	this.monsters = game.gameelementlist.filter(MonsterDescription).toList();
+	this.monsterPlacements = game.gameelementlist.filter(MonsterPlacement).toList();
+	
 	
 	'''
 	<asl version="580">
@@ -146,9 +172,6 @@ class RPGGenerator extends AbstractGenerator {
 	 		« elem.compile »
 	 	 «ENDFOR»
  	 	 «FOR elem : game.gameelementlist.filter(MonsterList) »
- 	 		« elem.compile »
- 	 	 «ENDFOR»
- 	 	 «FOR elem : game.gameelementlist.filter(ExitList) »
  	 		« elem.compile »
  	 	 «ENDFOR»
 	
