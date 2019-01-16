@@ -14,14 +14,12 @@ import myDSLAdventure.Weapon
 import myDSLAdventure.RoomList
 import myDSLAdventure.WeaponList
 import myDSLAdventure.ExitList
+import myDSLAdventure.Monster
 import myDSLAdventure.MonsterList
-import myDSLAdventure.MonsterDescription
 import myDSLAdventure.MonsterEquipment
 import myDSLAdventure.MonsterPlacement
 import myDSLAdventure.Exit
 import myDSLAdventure.Room
-import myDSLAdventure.RoomId
-import myDSLAdventure.WeaponId
 import myDSLAdventure.MonsterStatement
 import java.util.List
 import java.util.ArrayList
@@ -96,15 +94,14 @@ class RPGGenerator extends AbstractGenerator {
 	def dispatch compile(MonsterEquipment monsterList) '''TODO'''
 	
 	def dispatch compile(Exit exit) '''
-		<exit alias="« exit.action »" to="« findRoom(exit.goto).roomName »">
+		<exit alias="« exit.action »" to="« exit.goto.fullName »">
 			<message>« exit.description »</message>
 		</exit>
 	'''
-	
-	def dispatch compile(RoomId id) ''' « id.roomId » '''
+
 
 	def dispatch compile(Room room) '''
-		  <object name="« room.roomName »">
+		  <object name="« room.fullName »">
 		    <inherit name="editor_room" />
 		    <isroom />
 		    <description>« room.description »</description>
@@ -115,13 +112,13 @@ class RPGGenerator extends AbstractGenerator {
 				« exit.compile »
 			«ENDFOR»
 			«FOR gameExit : gameExits.room»
-				«IF gameExit.roomId.equals(room.roomid.roomId)»
+				«IF gameExit.equals(room)»
 					<enter type="script">
 						finish
 					</enter>
 				«ENDIF»
 			«ENDFOR»
-			«IF player.startRoom.roomId.equals(room.roomid.roomId) »
+			«IF player.startRoom.equals(room) »
 				« player.compile »
 			«ENDIF»
 			«FOR placement: monsterPlacements »
@@ -135,9 +132,7 @@ class RPGGenerator extends AbstractGenerator {
 			«ENDFOR»
 		  </object>
 	'''
-	
-	
-	def dispatch compile(WeaponId monsterList) ''''''
+
 	def dispatch compile(Weapon monsterList) ''''''
 	
 	def dispatch compile(Game game) {

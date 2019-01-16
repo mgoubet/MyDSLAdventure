@@ -5,9 +5,6 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="room" upperBound="-1" eType="#//Room"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="RoomId">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="roomId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Game">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="gameTitle" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="gameelementlist" upperBound="-1"
@@ -16,7 +13,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="GameElementList" abstract="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="ExitList" eSuperTypes="#//GameElementList">
     <eStructuralFeatures xsi:type="ecore:EReference" name="room" lowerBound="1" upperBound="-1"
-        eType="#//RoomId" containment="true"/>
+        eType="#//Room"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MonsterList" eSuperTypes="#//GameElementList">
     <eStructuralFeatures xsi:type="ecore:EReference" name="monsterstatement" upperBound="-1"
@@ -24,53 +21,52 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Player" eSuperTypes="#//GameElementList">
     <eStructuralFeatures xsi:type="ecore:EReference" name="startRoom" lowerBound="1"
-        eType="#//RoomId" containment="true"/>
+        eType="#//Room"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="healthPoints" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="weaponid" eType="#//WeaponId"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="weapon" eType="#//Weapon"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MonsterDescription" eSuperTypes="#//MonsterStatement">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Monster" eSuperTypes="#//MonsterStatement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseDamage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseWeaponName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fullName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="health" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MonsterStatement" abstract="true">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="monsterId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MonsterStatement" abstract="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="MonsterPlacement" eSuperTypes="#//MonsterStatement">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="room" lowerBound="1" eType="#//RoomId"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="room" lowerBound="1" eType="#//Room"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="monster" lowerBound="1"
+        eType="#//Monster"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="WeaponList" eSuperTypes="#//GameElementList">
     <eStructuralFeatures xsi:type="ecore:EReference" name="weapon" upperBound="-1"
         eType="#//Weapon" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Weapon">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="damage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="weaponid" lowerBound="1"
-        eType="#//WeaponId" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fullName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Room">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="roomid" lowerBound="1"
-        eType="#//RoomId" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="roomName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="exits" upperBound="-1"
         eType="#//Exit" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="WeaponId">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="weaponId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fullName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MonsterEquipment" eSuperTypes="#//MonsterStatement">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="weapon" eType="#//WeaponId"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="weapon" lowerBound="1"
+        eType="#//Weapon"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="monster" lowerBound="1"
+        eType="#//Monster"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Exit">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="action" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="goto" lowerBound="1" eType="#//RoomId"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="goto" lowerBound="1" eType="#//Room"/>
   </eClassifiers>
 </ecore:EPackage>
