@@ -15,15 +15,13 @@ import myDSLAdventure.RoomList
 import myDSLAdventure.WeaponList
 import myDSLAdventure.ExitList
 import myDSLAdventure.MonsterList
-import myDSLAdventure.MonsterDescription
 import myDSLAdventure.MonsterEquipment
 import myDSLAdventure.MonsterPlacement
 import myDSLAdventure.Exit
 import myDSLAdventure.Room
-import myDSLAdventure.RoomId
-import myDSLAdventure.WeaponId
 import myDSLAdventure.MonsterStatement
 import java.util.List
+import myDSLAdventure.Monster
 
 /**
  * Generates code from your model files on save.
@@ -73,20 +71,19 @@ class RPGGenerator extends AbstractGenerator {
 	def dispatch compile(GameElementList monsterList) '''TODO'''
 	def dispatch compile(MonsterStatement monsterList) '''TODO'''
 	
-	def dispatch compile(MonsterDescription monsterList) '''TODO'''
+	def dispatch compile(Monster monsterList) '''TODO'''
 	def dispatch compile(MonsterEquipment monsterList) '''TODO'''
 	def dispatch compile(MonsterPlacement monsterList) '''TODO'''
 	
 	def dispatch compile(Exit exit) '''
-		<exit alias="« exit.action »" to="« findRoom(exit.goto).roomName »">
+		<exit alias="« exit.action »" to="« exit.goto.fullName »">
 			<message>« exit.description »</message>
 		</exit>
 	'''
-	
-	def dispatch compile(RoomId id) ''' « id.roomId » '''
+
 
 	def dispatch compile(Room room) '''
-		  <object name="« room.roomName »">
+		  <object name="« room.fullName »">
 		    <inherit name="editor_room" />
 		    <isroom />
 		    <description>« room.description »</description>
@@ -96,8 +93,8 @@ class RPGGenerator extends AbstractGenerator {
 			«FOR exit : room.exits»
 				« exit.compile »
 			«ENDFOR»
-			«FOR gameExit : gameExits.room»
-				«IF gameExit.roomId.equals(room.roomid.roomId)»
+«FOR gameExit : gameExits.room»
+				«IF gameExit.equals(room)»
 					<exit alias="exitName">
 						<runscript />
 						<script type="script">
@@ -107,14 +104,13 @@ class RPGGenerator extends AbstractGenerator {
 					</exit>
 				«ENDIF»
 			«ENDFOR»
-			«IF player.startRoom.roomId.equals(room.roomid.roomId) »
+			«IF player.startRoom.equals(room) »
 				« player.compile »
 			«ENDIF»
 		  </object>
 	'''
 	
 	
-	def dispatch compile(WeaponId monsterList) '''TODO'''
 	def dispatch compile(Weapon monsterList) '''TODO'''
 	
 	def dispatch compile(Game game) {
