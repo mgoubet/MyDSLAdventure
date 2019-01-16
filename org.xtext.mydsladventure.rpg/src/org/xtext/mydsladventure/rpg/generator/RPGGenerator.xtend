@@ -78,17 +78,25 @@ class RPGGenerator extends AbstractGenerator {
 		      	this.health = this.health - « 2 »
 				msg("You inflict « -2 »HP to « monster.fullName »")
 		      	if (this.health <= 0) {
-		      		RemoveObject(«monster.name»)
 		      		msg("You kill « monster.fullName »")
-		      	}
-		      	else {
-			      	msg("« monster.fullName » uses « monster.baseWeaponName »")
-			      	msg("You lost « monster.baseDamage » HP")
-			      	DecreaseHealth(« monster.baseDamage * 100 / player.healthPoints »)
+		      		RemoveObject(«monster.name»)
 		      	}
 		      ]]>
 		      </attack>
+  		      <autoAttack type="script"><![CDATA[
+  		      	if (this.health > 0) {
+		    		msg("« monster.fullName » uses « monster.baseWeaponName »")
+			      	msg("You lost « monster.baseDamage » HP")
+			      	DecreaseHealth(« monster.baseDamage * 100 / player.healthPoints »)
+		      	}
+  		      ]]></autoAttack>
 		    </object>
+		    <turnscript>
+		    	<enabled />
+		    	<script>
+		    		do (« monster.name », "autoAttack")
+		    	</script>
+		    </turnscript>
 	'''
 
 	def dispatch compile(MonsterEquipment monsterList) '''TODO'''
