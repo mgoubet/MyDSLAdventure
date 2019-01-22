@@ -6,6 +6,11 @@ package org.xtext.mydsladventure.rpg.ui.labeling
 import com.google.inject.Inject
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider
 import org.eclipse.xtext.ui.label.DefaultEObjectLabelProvider
+import myDSLAdventure.RoomList
+import myDSLAdventure.WeaponList
+import myDSLAdventure.MonsterList
+import myDSLAdventure.Monster
+import myDSLAdventure.ExitList
 
 /**
  * Provides labels for EObjects.
@@ -18,14 +23,20 @@ class RPGLabelProvider extends DefaultEObjectLabelProvider {
 	new(AdapterFactoryLabelProvider delegate) {
 		super(delegate);
 	}
-
-	// Labels and icons can be computed like this:
 	
-//	def text(Greeting ele) {
-//		'A greeting to ' + ele.name
-//	}
-//
-//	def image(Greeting ele) {
-//		'Greeting.gif'
-//	}
+	def text(MonsterList monsterList) {
+		"Monsters [" + monsterList.monsterStatements.filter(Monster).length + "]"
+	}
+
+	def text(WeaponList weaponList) {
+		"Weapons [" + weaponList.weapons.length + "]"
+	}
+	
+	def text(RoomList roomList) {
+		"Rooms [" + roomList.rooms.length + "]"
+	}
+	
+	def text(ExitList exitList) {
+		"Exits [" + exitList.room.length + "]"
+	}
 }
