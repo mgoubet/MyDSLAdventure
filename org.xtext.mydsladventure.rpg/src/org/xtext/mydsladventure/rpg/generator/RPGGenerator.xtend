@@ -36,6 +36,7 @@ class RPGGenerator extends AbstractGenerator {
 	ExitList gameExits;
 	List<Monster> monsters = new ArrayList<Monster>();
 	List<MonsterPlacement> monsterPlacements = new ArrayList<MonsterPlacement>();
+	List<MonsterEquipment> monsterEquipments = new ArrayList<MonsterEquipment>();
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 		fsa.generateFile(resource.URI.trimFileExtension.appendFileExtension("aslx").lastSegment, 
@@ -56,50 +57,46 @@ class RPGGenerator extends AbstractGenerator {
 			« room.compile »
 		«ENDFOR»
 	'''
-	def dispatch compile(WeaponList monsterList) ''''''
 
 	def dispatch compile(Player player) '''
 		<object name="player">
 	      <inherit name="editor_object" />
 	      <inherit name="editor_player" />
-	    </object>	
+	      «player.weapon.compile»
+	    </object>
 	'''	
-	
-	def dispatch compile(GameElementList monsterList) ''''''
-	def dispatch compile(MonsterStatement monsterList) ''''''
+
 	
 	def dispatch compile(Monster monster) '''
-			<object name="«monster.name»">
-		      <inherit name="editor_object" />
-		      <alias>«monster.fullName»</alias>
-		      <displayverbs type="stringlist" />
-		      <health type="int">« monster.health »</health>
-		      <attack type="script"><![CDATA[
-		      	this.health = this.health - « 2 »
-				msg("You inflict « -2 »HP to « monster.fullName »")
-		      	if (this.health <= 0) {
-		      		msg("You kill « monster.fullName »")
-		      		RemoveObject(«monster.name»)
-		      	}
-		      ]]>
-		      </attack>
-  		      <autoAttack type="script"><![CDATA[
-  		      	if (this.health > 0) {
-		    		msg("« monster.fullName » uses « monster.baseWeaponName »")
-			      	msg("You lost « monster.baseDamage » HP")
-			      	DecreaseHealth(« monster.baseDamage * 100 / player.healthPoints »)
-		      	}
-  		      ]]></autoAttack>
-		    </object>
-		    <turnscript>
-		    	<enabled />
-		    	<script>
-		    		do (« monster.name », "autoAttack")
-		    	</script>
-		    </turnscript>
+		    <object name="«monster.name»">
+	          <inherit name="editor_object" />
+	          <inherit name="monster" />
+	          <visible />
+	          <alias>«monster.fullName»</alias>
+	          <level type="int">0</level>
+	          <hitpoints type="int">« monster.health »</hitpoints>
+	          <xp type="int">0</xp>
+	          <monstertype>Human</monstertype>
+	          <attacktype>Natural</attacktype>
+	          <desc>A «monster.fullName»</desc>
+	          <lookwhendead>Looks like a dead «monster.fullName».</lookwhendead>
+	          <nocorpse type="boolean">false</nocorpse>
+	          <attackasgroup />
+	          <damagedicenumber type="int">«monster.baseDamage»</damagedicenumber>
+	          <attackdesc>% uses «monster.baseWeaponName»</attackdesc>
+	          «FOR meq : monsterEquipments»
+	          	«IF meq.monster.equals(monster)»
+		          «meq.weapon.compile»
+  		          <object name="Weapon_«meq.weapon.name»">
+  		            <inherit name="editor_object" />
+  		            <inherit name="monster_attack" />
+                    <damagedicenumber type="int">«meq.weapon.damage»</damagedicenumber>
+  		            <attackdesck>% uses «meq.weapon.fullName»</attackdesc>
+  		          </object>
+	          	«ENDIF»
+	          «ENDFOR»
+	        </object>
 	'''
-
-	def dispatch compile(MonsterEquipment monsterList) '''TODO'''
 	
 	def dispatch compile(Exit exit) '''
 		<exit alias="« exit.action »" to="« exit.goto.fullName »">
@@ -141,16 +138,28 @@ class RPGGenerator extends AbstractGenerator {
 		  </object>
 	'''
 
-	def dispatch compile(Weapon monsterList) ''''''
+	def dispatch compile(Weapon weapon) '''
+      <object name="«weapon.name»">
+        <inherit name="editor_object" />
+        <inherit name="weapon" />
+        <canberusted type="boolean">false</canberusted>
+        <canbevenomed type="boolean">false</canbevenomed>
+        <damagedicenumber type="int">«weapon.damage»</damagedicenumber>
+        <alias>«weapon.fullName»</alias>
+        <notindescription type="boolean">false</notindescription>
+        <destroyonsale type="boolean">false</destroyonsale>
+      </object>
+    '''
 	
 	def dispatch compile(Game game) {
 	
 	this.player = game.gameElementLists.filter(Player).get(0);
 	this.rooms = game.gameElementLists.filter(RoomList).toList();
 	this.gameExits = game.gameElementLists.filter(ExitList).get(0);
-	
+
 	for (MonsterList list : game.gameElementLists.filter(MonsterList).toList()) {
 		this.monsterPlacements.addAll(list.monsterStatements.filter(MonsterPlacement).toList());
+		this.monsterEquipments.addAll(list.monsterStatements.filter(MonsterEquipment).toList());
 		this.monsters.addAll(list.monsterStatements.filter(Monster).toList());
 	}
 	
@@ -158,19 +167,16 @@ class RPGGenerator extends AbstractGenerator {
 	<asl version="580">
 	  <include ref="English.aslx" />
 	  <include ref="Core.aslx" />
+	  <include ref="CombatLib.aslx" />
 	  <game name="« game.gameTitle »">
 	    <gameid>3a5e3f9b-f412-4085-b1c1-06d83237d484</gameid>
 	    <version>1.0</version>
 	    <firstpublished>2019</firstpublished>
-	    <showhealth />
+        <start type="script">
+        	CombatInitialise
+        </start>
+        <feature_advancedwearables />
 	    <turnoffcompass />
-	    <onhealthzero type="script">
-	    	SetBackgroundColour ("Gray")
-	    	SetForegroundColour ("Red")
-	    	SetFontSize (32)
-	    	PrintCentered("WASTED")
-	    	finish
-	    </onhealthzero>
 	  </game>
 	  <verb>
 	  	<property>attack</property>
@@ -181,10 +187,7 @@ class RPGGenerator extends AbstractGenerator {
 		 «FOR elem : game.gameElementLists.filter(RoomList) »
 			« elem.compile »
 		 «ENDFOR»
-	 	 «FOR elem : game.gameElementLists.filter(WeaponList) »
-	 		« elem.compile »
-	 	 «ENDFOR»
-	
+
 	</asl>
 	
 	'''
