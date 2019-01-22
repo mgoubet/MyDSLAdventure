@@ -62,6 +62,16 @@ class RPGGenerator extends AbstractGenerator {
 		<object name="player">
 	      <inherit name="editor_object" />
 	      <inherit name="editor_player" />
+	      <statusattributes type="stringdictionary">
+	      	<item>
+	      	  <key>hitpoints</key>
+	      	  <value></value>
+	      	</item>
+	      	<item>
+	      	  <key>equipped</key>
+			  <value></value>
+			</item>
+		</statusattributes>
 	      «player.weapon.compile»
 	    </object>
 	'''	
