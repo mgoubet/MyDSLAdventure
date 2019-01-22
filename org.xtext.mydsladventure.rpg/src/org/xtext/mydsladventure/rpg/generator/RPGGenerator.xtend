@@ -44,7 +44,7 @@ class RPGGenerator extends AbstractGenerator {
 	
 	def findRoom(String id) {
 		for (list : rooms) {
-			for (room : list.room) {
+			for (room : list.rooms) {
 				if (room.name.equals(id))
 					return room;
 			}
@@ -52,7 +52,7 @@ class RPGGenerator extends AbstractGenerator {
 	}
 		
 	def dispatch compile(RoomList rooms) '''
-		«FOR room : rooms.room»
+		«FOR room : rooms.rooms»
 			« room.compile »
 		«ENDFOR»
 	'''
@@ -145,13 +145,13 @@ class RPGGenerator extends AbstractGenerator {
 	
 	def dispatch compile(Game game) {
 	
-	this.player = game.gameelementlist.filter(Player).get(0);
-	this.rooms = game.gameelementlist.filter(RoomList).toList();
-	this.gameExits = game.gameelementlist.filter(ExitList).get(0);
+	this.player = game.gameElementLists.filter(Player).get(0);
+	this.rooms = game.gameElementLists.filter(RoomList).toList();
+	this.gameExits = game.gameElementLists.filter(ExitList).get(0);
 	
-	for (MonsterList list : game.gameelementlist.filter(MonsterList).toList()) {
-		this.monsterPlacements.addAll(list.monsterstatement.filter(MonsterPlacement).toList());
-		this.monsters.addAll(list.monsterstatement.filter(Monster).toList());
+	for (MonsterList list : game.gameElementLists.filter(MonsterList).toList()) {
+		this.monsterPlacements.addAll(list.monsterStatements.filter(MonsterPlacement).toList());
+		this.monsters.addAll(list.monsterStatements.filter(Monster).toList());
 	}
 	
 	'''
@@ -178,10 +178,10 @@ class RPGGenerator extends AbstractGenerator {
 	  	<defaultexpression>"Thou shall not attack " + object.article + "."</defaultexpression>
 	  </verb>
 	
-		 «FOR elem : game.gameelementlist.filter(RoomList) »
+		 «FOR elem : game.gameElementLists.filter(RoomList) »
 			« elem.compile »
 		 «ENDFOR»
-	 	 «FOR elem : game.gameelementlist.filter(WeaponList) »
+	 	 «FOR elem : game.gameElementLists.filter(WeaponList) »
 	 		« elem.compile »
 	 	 «ENDFOR»
 	

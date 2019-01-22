@@ -2,12 +2,12 @@
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="myDSLAdventure" nsURI="http://myDSLAdventure" nsPrefix="myDSLAdventure">
   <eClassifiers xsi:type="ecore:EClass" name="RoomList" eSuperTypes="#//GameElementList">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="room" upperBound="-1" eType="#//Room"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rooms" lowerBound="1" upperBound="-1"
+        eType="#//Room" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Game">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="gameTitle" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="gameelementlist" upperBound="-1"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="gameElementLists" upperBound="-1"
         eType="#//GameElementList" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GameElementList" abstract="true"/>
@@ -16,8 +16,8 @@
         eType="#//Room"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MonsterList" eSuperTypes="#//GameElementList">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="monsterstatement" upperBound="-1"
-        eType="#//MonsterStatement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="monsterStatements" lowerBound="1"
+        upperBound="-1" eType="#//MonsterStatement" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Player" eSuperTypes="#//GameElementList">
     <eStructuralFeatures xsi:type="ecore:EReference" name="startRoom" lowerBound="1"
@@ -41,8 +41,8 @@
         eType="#//Monster"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="WeaponList" eSuperTypes="#//GameElementList">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="weapon" upperBound="-1"
-        eType="#//Weapon" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="weapons" lowerBound="1"
+        upperBound="-1" eType="#//Weapon" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Weapon">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
