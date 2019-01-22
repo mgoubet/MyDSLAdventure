@@ -70,7 +70,7 @@ class RPGGenerator extends AbstractGenerator {
 	def dispatch compile(Monster monster) '''
 		    <object name="«monster.name»">
 	          <inherit name="editor_object" />
-	          <inherit name="monster" />
+	          <inherit name="multi_monster" />
 	          <visible />
 	          <alias>«monster.fullName»</alias>
 	          <level type="int">0</level>
@@ -82,8 +82,12 @@ class RPGGenerator extends AbstractGenerator {
 	          <lookwhendead>Looks like a dead «monster.fullName».</lookwhendead>
 	          <nocorpse type="boolean">false</nocorpse>
 	          <attackasgroup />
-	          <damagedicenumber type="int">«monster.baseDamage»</damagedicenumber>
-	          <attackdesc>% uses «monster.baseWeaponName»</attackdesc>
+	          <object name="base_attack_«monster.name»">
+	            <inherit name="editor_object" />
+	            <inherit name="monster_attack" />
+	            <damagedicenumber type="int">«monster.baseDamage»</damagedicenumber>
+	            <attackdesc>% uses «monster.baseWeaponName»</attackdesc>
+	          </object>
 	          «FOR meq : monsterEquipments»
 	          	«IF meq.monster.equals(monster)»
 		          «meq.weapon.compile»
@@ -179,11 +183,6 @@ class RPGGenerator extends AbstractGenerator {
         <feature_advancedwearables />
 	    <turnoffcompass />
 	  </game>
-	  <verb>
-	  	<property>attack</property>
-	  	<pattern>attack</pattern>
-	  	<defaultexpression>"Thou shall not attack " + object.article + "."</defaultexpression>
-	  </verb>
 	
 		 «FOR elem : game.gameElementLists.filter(RoomList) »
 			« elem.compile »
