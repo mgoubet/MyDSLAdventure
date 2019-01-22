@@ -106,9 +106,10 @@ class RPGGenerator extends AbstractGenerator {
 
 
 	def dispatch compile(Room room) '''
-		  <object name="« room.fullName »">
+		  <object name="« room.name »">
 		    <inherit name="editor_room" />
 		    <isroom />
+		    <alias>«room.fullName»</alias>
 		    <description>« room.description »</description>
 		    <descprefix>You are in</descprefix>
 		    <objectslistprefix>You can see</objectslistprefix>
