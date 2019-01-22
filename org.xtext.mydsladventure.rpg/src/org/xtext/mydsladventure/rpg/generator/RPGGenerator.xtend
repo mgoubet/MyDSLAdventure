@@ -41,6 +41,17 @@ class RPGGenerator extends AbstractGenerator {
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 		fsa.generateFile(resource.URI.trimFileExtension.appendFileExtension("aslx").lastSegment, 
 			resource.allContents.filter(Game).toIterable.head.compile.toString);
+			
+		var zipFile = new QuestArchiveBuilder()
+			.addFile(
+				resource.URI.trimFileExtension.appendFileExtension("aslx").lastSegment,
+				fsa.readTextFile(resource.URI.trimFileExtension.appendFileExtension("aslx").lastSegment).toString()
+			)
+			.addFilesFromResources(".*generator/resources/CombatLib/.*\\.aslx")
+			.addFilesFromResources(".*generator/resources/CombatLib/.*\\.xml")
+			.stream
+			
+		fsa.generateFile(resource.URI.trimFileExtension.appendFileExtension("quest").lastSegment, zipFile);
 	}
 	
 	def findRoom(String id) {
