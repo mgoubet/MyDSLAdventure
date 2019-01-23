@@ -8,11 +8,9 @@ import org.eclipse.xtext.generator.AbstractGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
 import myDSLAdventure.Game
-import myDSLAdventure.GameElementList
 import myDSLAdventure.Player
 import myDSLAdventure.Weapon
 import myDSLAdventure.RoomList
-import myDSLAdventure.WeaponList
 import myDSLAdventure.ExitList
 import myDSLAdventure.Monster
 import myDSLAdventure.MonsterList
@@ -20,7 +18,6 @@ import myDSLAdventure.MonsterEquipment
 import myDSLAdventure.MonsterPlacement
 import myDSLAdventure.Exit
 import myDSLAdventure.Room
-import myDSLAdventure.MonsterStatement
 import java.util.List
 import java.util.ArrayList
 
@@ -29,7 +26,7 @@ import java.util.ArrayList
  * 
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#code-generation
  */
-class RPGGenerator extends AbstractGenerator {
+class ASLXGenerator extends AbstractGenerator {
 	
 	Player player;
 	List<RoomList> rooms;
