@@ -11,6 +11,9 @@ import myDSLAdventure.WeaponList
 import myDSLAdventure.MonsterList
 import myDSLAdventure.Monster
 import myDSLAdventure.ExitList
+import myDSLAdventure.Room
+import myDSLAdventure.Weapon
+import myDSLAdventure.Game
 
 /**
  * Provides labels for EObjects.
@@ -38,5 +41,37 @@ class RPGLabelProvider extends DefaultEObjectLabelProvider {
 	
 	def text(ExitList exitList) {
 		"Exits [" + exitList.room.length + "]"
+	}
+	
+	def image(Game game) {
+		"controller.png"
+	}
+	
+	def image(Room room) {
+		"Door_green.png"
+	}
+	
+	def image(RoomList roomList) {
+		"Door_green.png"
+	}
+	
+	def image(ExitList exitList) {
+		"Door_red.png"
+	}
+	
+	def image(Weapon weapon) {
+		"Weapon.gif"
+	}
+	
+	def image(WeaponList weaponList) {
+		"Weapon.gif"
+	}
+	
+	def image(Monster monster) {
+		"Monster.gif"
+	}
+	
+	def image(MonsterList monsterList) {
+		"Monster.gif"
 	}
 }
