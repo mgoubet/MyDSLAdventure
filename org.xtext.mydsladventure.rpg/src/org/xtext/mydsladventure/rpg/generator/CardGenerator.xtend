@@ -20,6 +20,10 @@ import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.AbstractGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
+import myDSLAdventure.RoomList
+import myDSLAdventure.Room
+import java.util.StringTokenizer
+import java.awt.Graphics2D
 
 /**
  * Generates code from your model files on save.
@@ -75,6 +79,24 @@ class CardGenerator extends AbstractGenerator {
 	    return  Arrays.asList(Card.fromByteArray(baos.toByteArray(), monster.name));
 	}
 	
+	def compile(Room room) {
+		var bufferedImage = ImageIO.read(cardTemplate);
+
+	    var g2d = bufferedImage.createGraphics();
+	    
+	    g2d.setColor(Color.black);
+	    g2d.drawString(room.fullName, 40, 50)
+	    
+	    drawString(g2d, room.description, 45, 40, 370)
+
+	    g2d.dispose();
+	    
+	    var baos = new ByteArrayOutputStream();
+	    ImageIO.write(bufferedImage, "png", baos);
+	    	    
+	    return  Arrays.asList(Card.fromByteArray(baos.toByteArray(), room.name));
+	}
+	
 	def compile(Game game) {
 		var cards = new ArrayList();
 		
@@ -87,7 +109,39 @@ class CardGenerator extends AbstractGenerator {
 			cards.addAll(m.compile)
 		}
 		
+		for (RoomList list : game.gameElementLists.filter(RoomList).toList()) {
+			for (Room room : list.rooms.toList()) {
+				cards.addAll(room.compile)
+			}
+		}
+		
 		return cards;
+	}
+	
+	def drawString(Graphics2D g2d, String text, int maxLineLength, int startX, int startY) {
+		var formated = addLinebreaks(text, maxLineLength)
+		var count = 0
+		for (String line : formated.split("\n")) {
+	    	g2d.drawString(line, startX, startY + count * 12)
+	    	count++	
+		}
+	}
+
+	def addLinebreaks(String input, int maxLineLength) {
+	    var tok = new StringTokenizer(input, " ");
+	    var output = new StringBuilder(input.length());
+	    var lineLen = 0;
+	    while (tok.hasMoreTokens()) {
+	        var word = tok.nextToken();
+	
+	        if (lineLen + word.length() > maxLineLength) {
+	            output.append("\n");
+	            lineLen = 0;
+	        }
+	        output.append(word + " ");
+	        lineLen += word.length();
+	    }
+	    return output.toString();
 	}
 	
 	static class Card {
