@@ -24,6 +24,10 @@ import org.eclipse.xtext.generator.AbstractGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
 import org.eclipse.draw2d.geometry.Point
+import java.awt.Graphics2D
+import java.awt.geom.AffineTransform
+import java.awt.Polygon
+import java.awt.geom.Line2D
 
 /**
  * Generates code from your model files on save.
@@ -31,6 +35,8 @@ import org.eclipse.draw2d.geometry.Point
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#code-generation
  */
 class MapGenerator extends AbstractGenerator {
+	
+	val arrowSize = 4;
 	
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 		var rooms = new ArrayList();
@@ -99,7 +105,12 @@ class MapGenerator extends AbstractGenerator {
 				path.lineTo(point.x + 20, point.y + 20);
 			}
 			g2d.setColor(Color.black);
-			g2d.draw(path);			
+			g2d.draw(path);
+			
+			var oneToLast = edge.points.getPoint(edge.points.size - 2);		
+			var line = new java.awt.geom.Line2D.Double();
+			line.setLine(oneToLast.x + 20, oneToLast.y + 20, edge.points.lastPoint.x + 20, edge.points.lastPoint.y + 20);
+			drawArrowHead(g2d, line);
 		}
 
 	    g2d.dispose();
@@ -109,6 +120,24 @@ class MapGenerator extends AbstractGenerator {
 		var stream = new ByteArrayInputStream(baos.toByteArray());
 		
 		fsa.generateFile(resource.URI.trimFileExtension.segment(resource.URI.trimFileExtension.segmentCount - 1) + "_map.png", stream);
+	}
+	
+	def void drawArrowHead(Graphics2D g2d, Line2D line) { 
+		var tx = new AffineTransform(); 
+	    tx.setToIdentity();
+	    var angle = Math.atan2(line.y2-line.y1, line.x2-line.x1);
+	    tx.translate(line.x2, line.y2);
+	    tx.rotate((angle-Math.PI/2d));
+	    
+	    var arrowHead = new Polygon();  
+		arrowHead.addPoint(0, 0);
+		arrowHead.addPoint(-arrowSize, -2 - arrowSize * 2);
+		arrowHead.addPoint(arrowSize, -2 - arrowSize * 2);
+	
+	    var g = g2d.create() as Graphics2D;
+	    g.setTransform(tx);   
+	    g.fill(arrowHead);
+	    g.dispose();
 	}
 	
 }
