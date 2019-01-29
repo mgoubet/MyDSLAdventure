@@ -143,6 +143,9 @@ class ASLXGenerator extends AbstractGenerator {
 		    <descprefix>You are in</descprefix>
 		    <objectslistprefix>You can see</objectslistprefix>
 		    <usedefaultprefix type="boolean">false</usedefaultprefix>
+		    <beforeenter type="script">
+		    	game.currentroom = "«room.name»"
+		    </beforeenter>
 			«FOR exit : room.exits»
 				« exit.compile »
 			«ENDFOR»
@@ -207,8 +210,15 @@ class ASLXGenerator extends AbstractGenerator {
         </start>
         <feature_advancedwearables />
 	    <turnoffcompass />
+	    <attr name="currentroom" type="string"></attr>
 	  </game>
-	
+	  <command>
+		  <pattern>Where</pattern>
+		  <script>
+		  	picture("«projectName».png")
+		  	msg("You are in " + game.currentroom)
+		  </script>
+	  </command>
 		 «FOR elem : game.gameElementLists.filter(RoomList) »
 			« elem.compile »
 		 «ENDFOR»
