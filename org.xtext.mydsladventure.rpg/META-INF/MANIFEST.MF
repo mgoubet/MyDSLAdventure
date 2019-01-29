@@ -24,4 +24,5 @@ Export-Package: org.xtext.mydsladventure.rpg.services,
  org.xtext.mydsladventure.rpg.serializer,
  org.xtext.mydsladventure.rpg.parser.antlr.internal,
  org.xtext.mydsladventure.rpg.generator
-Import-Package: org.apache.log4j
+Import-Package: org.apache.log4j,
+ org.eclipse.draw2d.graph

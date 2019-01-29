@@ -18,6 +18,7 @@ class RPGGenerator extends AbstractGenerator {
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 		(new ASLXGenerator()).doGenerate(resource, fsa, context);
 		(new CardGenerator()).doGenerate(resource, fsa, context);
+		(new MapGenerator()).doGenerate(resource, fsa, context);
 	}
 	
 }
