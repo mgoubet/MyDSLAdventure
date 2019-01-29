@@ -34,8 +34,12 @@ class ASLXGenerator extends AbstractGenerator {
 	List<Monster> monsters = new ArrayList<Monster>();
 	List<MonsterPlacement> monsterPlacements = new ArrayList<MonsterPlacement>();
 	List<MonsterEquipment> monsterEquipments = new ArrayList<MonsterEquipment>();
+	
+	String projectName;
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
+		projectName = resource.URI.trimFileExtension.segment(resource.URI.trimFileExtension.segmentCount - 1);
+		
 		fsa.generateFile(resource.URI.trimFileExtension.appendFileExtension("aslx").lastSegment, 
 			resource.allContents.filter(Game).toIterable.head.compile.toString);
 			
@@ -97,7 +101,7 @@ class ASLXGenerator extends AbstractGenerator {
 	          <monstertype>Human</monstertype>
 	          <attacktype>Natural</attacktype>
 	          <descscript type="script">
-                  picture ("test/«monster.name».png")
+                  picture ("«projectName»/«monster.name».png")
                   msg("A «monster.fullName»")
 	          </descscript>
 	          <lookwhendead>Looks like a dead «monster.fullName».</lookwhendead>
