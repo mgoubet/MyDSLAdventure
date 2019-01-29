@@ -85,6 +85,18 @@ class ASLXGenerator extends AbstractGenerator {
 			</item>
 		</statusattributes>
 	      «player.weapon.compile»
+	      <object name="map">
+            <inherit name="editor_object" />
+            <look type="script">
+              picture ("«projectName».png")
+              msg ("You are in " + game.currentroom)
+            </look>
+            <inventoryverbs type="stringlist">
+              <value>Look at</value>
+              <value>Drop</value>
+            </inventoryverbs>
+            <take />
+          </object>
 	    </object>
 	'''	
 
@@ -212,13 +224,6 @@ class ASLXGenerator extends AbstractGenerator {
 	    <turnoffcompass />
 	    <attr name="currentroom" type="string"></attr>
 	  </game>
-	  <command>
-		  <pattern>Where</pattern>
-		  <script>
-		  	picture("«projectName».png")
-		  	msg("You are in " + game.currentroom)
-		  </script>
-	  </command>
 		 «FOR elem : game.gameElementLists.filter(RoomList) »
 			« elem.compile »
 		 «ENDFOR»
