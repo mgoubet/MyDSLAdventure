@@ -96,7 +96,10 @@ class ASLXGenerator extends AbstractGenerator {
 	          <xp type="int">0</xp>
 	          <monstertype>Human</monstertype>
 	          <attacktype>Natural</attacktype>
-	          <desc>A «monster.fullName»</desc>
+	          <descscript type="script">
+                  picture ("test/«monster.name».png")
+                  msg("A «monster.fullName»")
+	          </descscript>
 	          <lookwhendead>Looks like a dead «monster.fullName».</lookwhendead>
 	          <nocorpse type="boolean">false</nocorpse>
 	          <attackasgroup />
@@ -113,7 +116,7 @@ class ASLXGenerator extends AbstractGenerator {
   		            <inherit name="editor_object" />
   		            <inherit name="monster_attack" />
                     <damagedicenumber type="int">«meq.weapon.damage»</damagedicenumber>
-  		            <attackdesck>% uses «meq.weapon.fullName»</attackdesc>
+  		            <attackdesc>% uses «meq.weapon.fullName»</attackdesc>
   		          </object>
 	          	«ENDIF»
 	          «ENDFOR»
@@ -121,7 +124,7 @@ class ASLXGenerator extends AbstractGenerator {
 	'''
 	
 	def dispatch compile(Exit exit) '''
-		<exit alias="« exit.action »" to="« exit.goto.fullName »">
+		<exit alias="« exit.action »" to="« exit.goto.name »">
 			<message>« exit.description »</message>
 		</exit>
 	'''
