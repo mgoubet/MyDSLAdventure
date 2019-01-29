@@ -37,6 +37,7 @@ import java.awt.geom.Line2D
 class MapGenerator extends AbstractGenerator {
 	
 	val arrowSize = 4;
+	var padding = 20;
 	
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 		var rooms = new ArrayList();
@@ -51,7 +52,7 @@ class MapGenerator extends AbstractGenerator {
 		
 		for (Room r : rooms) {
 			var node = new Node(r.name);
-			node.width = cg2d.getFontMetrics().stringWidth(r.name) + 20;
+			node.width = cg2d.getFontMetrics().stringWidth(r.name) + padding;
 			graph.nodes.add(node);
 			nodes.put(r.name, node);
 		}
@@ -59,7 +60,7 @@ class MapGenerator extends AbstractGenerator {
 		for (Room from : rooms) {
 			for (Exit to : from.exits) {
 				var edge = new Edge(to.action, nodes.get(from.name), nodes.get(to.goto.name));
-				edge.setPadding(20);
+				edge.setPadding(padding);
 				graph.edges.add(edge);
 			}
 		}
@@ -76,7 +77,7 @@ class MapGenerator extends AbstractGenerator {
 			maxY = Math.max(maxY, node.y + node.height);
 		}
 		
-		var bufferedImage = new BufferedImage(maxX + 80, maxY + 80, BufferedImage.TYPE_INT_ARGB);
+		var bufferedImage = new BufferedImage(maxX + padding * 2, maxY + padding * 2, BufferedImage.TYPE_INT_ARGB);
 
 	    var g2d = bufferedImage.createGraphics();
 	    
@@ -87,10 +88,10 @@ class MapGenerator extends AbstractGenerator {
 		for (var i = 0; i < graph.nodes.length; i++) {
 			var node = graph.nodes.getNode(i);
 			g2d.setColor(Color.white);
-			g2d.fillRoundRect(node.x + 20, node.y + 20, node.width, node.height, 5, 5);
+			g2d.fillRoundRect(node.x + padding, node.y + padding, node.width, node.height, 5, 5);
 			g2d.setColor(Color.black);
-			g2d.drawRoundRect(node.x + 20, node.y + 20, node.width, node.height, 5, 5);
-	    	g2d.drawString(node.data.toString(), node.x + 10 + 20, node.y + node.height / 2 + 20);
+			g2d.drawRoundRect(node.x + padding, node.y + padding, node.width, node.height, 5, 5);
+	    	g2d.drawString(node.data.toString(), node.x + padding / 2 + padding, node.y + node.height / 2 + padding);
 		}
 		
 		for (var i = 0; i < graph.edges.length; i++) {
@@ -99,17 +100,17 @@ class MapGenerator extends AbstractGenerator {
 			
 			var vNodes = edge.vNodes;
 			
-			path.moveTo(edge.points.getPoint(0).x + 20, edge.points.firstPoint.y + 20);
+			path.moveTo(edge.points.getPoint(0).x + padding, edge.points.firstPoint.y + padding);
 			for (var p = 1; p < edge.points.size; p++) {
 				var point = edge.points.getPoint(p);
-				path.lineTo(point.x + 20, point.y + 20);
+				path.lineTo(point.x + padding, point.y + padding);
 			}
 			g2d.setColor(Color.black);
 			g2d.draw(path);
 			
 			var oneToLast = edge.points.getPoint(edge.points.size - 2);		
 			var line = new java.awt.geom.Line2D.Double();
-			line.setLine(oneToLast.x + 20, oneToLast.y + 20, edge.points.lastPoint.x + 20, edge.points.lastPoint.y + 20);
+			line.setLine(oneToLast.x + padding, oneToLast.y + padding, edge.points.lastPoint.x + padding, edge.points.lastPoint.y + padding);
 			drawArrowHead(g2d, line);
 		}
 
