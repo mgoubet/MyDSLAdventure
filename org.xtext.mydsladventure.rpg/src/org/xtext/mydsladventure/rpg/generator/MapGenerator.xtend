@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.AbstractGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
+import org.eclipse.draw2d.geometry.Point
 
 /**
  * Generates code from your model files on save.
@@ -51,7 +52,9 @@ class MapGenerator extends AbstractGenerator {
 		
 		for (Room from : rooms) {
 			for (Exit to : from.exits) {
-				graph.edges.add(new Edge(to.action, nodes.get(from.name), nodes.get(to.goto.name)));
+				var edge = new Edge(to.action, nodes.get(from.name), nodes.get(to.goto.name));
+				edge.setPadding(20);
+				graph.edges.add(edge);
 			}
 		}
 		
@@ -90,7 +93,13 @@ class MapGenerator extends AbstractGenerator {
 			
 			var vNodes = edge.vNodes;
 			
-			g2d.drawLine(edge.source.x + edge.sourceOffset + 20, edge.source.y + 20, edge.target.x + edge.targetOffset + 20, edge.target.y + 20);
+			path.moveTo(edge.points.getPoint(0).x + 20, edge.points.firstPoint.y + 20);
+			for (var p = 1; p < edge.points.size; p++) {
+				var point = edge.points.getPoint(p);
+				path.lineTo(point.x + 20, point.y + 20);
+			}
+			g2d.setColor(Color.black);
+			g2d.draw(path);			
 		}
 
 	    g2d.dispose();
