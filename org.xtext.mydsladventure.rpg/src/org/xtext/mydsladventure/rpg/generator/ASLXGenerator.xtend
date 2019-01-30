@@ -21,6 +21,7 @@ import myDSLAdventure.Room
 import java.util.List
 import java.util.ArrayList
 import myDSLAdventure.Action
+import javax.sound.sampled.BooleanControl.Type
 
 /**
  * Generates code from your model files on save.
@@ -37,6 +38,7 @@ class ASLXGenerator extends AbstractGenerator {
 	List<MonsterEquipment> monsterEquipments = new ArrayList<MonsterEquipment>();
 	
 	String projectName;
+	Boolean hasMonster = false;
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 		projectName = resource.URI.trimFileExtension.segment(resource.URI.trimFileExtension.segmentCount - 1);
@@ -121,6 +123,7 @@ class ASLXGenerator extends AbstractGenerator {
 	          </descscript>
 	          <lookwhendead>Looks like a dead «monster.fullName».</lookwhendead>
 	          <nocorpse type="boolean">false</nocorpse>
+	          <guarding/>
 	          <attackasgroup />
 	          <object name="base_attack_«monster.name»">
 	            <inherit name="editor_object" />
@@ -168,8 +171,25 @@ class ASLXGenerator extends AbstractGenerator {
 		    <beforeenter type="script">
 		    	game.currentroom = "«room.name»"
 		    </beforeenter>
+		    «hasMonster = false»
+		    «FOR placement: monsterPlacements »
+				«IF placement.room.equals(room)»
+					«FOR monster: monsters»
+						«IF monster.equals(placement.monster)»
+							« hasMonster = true » 
+							« monster.compile »
+						«ENDIF»
+					«ENDFOR»
+				«ENDIF»
+			«ENDFOR»
 			«FOR exit : room.exits»
-				« exit.compile »
+				<exit name="guard_«exit.action»_«room.name»" alias="« exit.action »" to="« exit.goto.name »">
+					<message>« exit.description »</message>
+					«IF hasMonster»
+						<locked/>
+						<lockmessage> That way is locked. You need to kill all the monsters </lockmessage>
+					«ENDIF»
+				</exit>
 			«ENDFOR»
 			
 			«FOR action: room.actions»
@@ -184,17 +204,7 @@ class ASLXGenerator extends AbstractGenerator {
 			«ENDFOR»
 			«IF player.startRoom.equals(room) »
 				« player.compile »
-			«ENDIF»
-			«FOR placement: monsterPlacements »
-				«IF placement.room.equals(room)»
-					«FOR monster: monsters»
-						«IF monster.equals(placement.monster)»
-							« monster.compile »
-						«ENDIF»
-					«ENDFOR»
-				«ENDIF»
-			«ENDFOR»
-			
+			«ENDIF»			
 			<command> 
 				<pattern>look around</pattern>
 				<script>
