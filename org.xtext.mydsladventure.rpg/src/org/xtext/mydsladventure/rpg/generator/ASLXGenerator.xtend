@@ -91,7 +91,7 @@ class ASLXGenerator extends AbstractGenerator {
 	      <object name="map">
             <inherit name="editor_object" />
             <look type="script">
-              picture ("«projectName».png")
+              picture ("«projectName»_map.png")
               msg ("You are in " + game.currentroom)
             </look>
             <inventoryverbs type="stringlist">

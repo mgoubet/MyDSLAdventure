@@ -108,7 +108,7 @@ class MapGenerator extends AbstractGenerator {
 	    ImageIO.write(bufferedImage, "png", baos);
 		var stream = new ByteArrayInputStream(baos.toByteArray());
 		
-		fsa.generateFile(resource.URI.trimFileExtension.segment(resource.URI.trimFileExtension.segmentCount - 1) + ".png", stream);
+		fsa.generateFile(resource.URI.trimFileExtension.segment(resource.URI.trimFileExtension.segmentCount - 1) + "_map.png", stream);
 	}
 	
 }
