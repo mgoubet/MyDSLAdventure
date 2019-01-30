@@ -86,7 +86,7 @@ class ASLXGenerator extends AbstractGenerator {
 			</item>
 		</statusattributes>
 		<feature_startscript />
-		<attr name="initialise" type="script"> player.hitpoints = «player.healthPoints» </attr>
+		<attr name="_initialise_" type="script"> player.hitpoints = «player.healthPoints» </attr>
 	      «player.weapon.compile»
 	      <object name="map">
             <inherit name="editor_object" />
