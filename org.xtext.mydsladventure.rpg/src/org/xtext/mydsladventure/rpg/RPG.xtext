@@ -6,7 +6,7 @@ import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 
 Game returns Game:
 	{Game}
-		gameTitle=EString
+		gameTitle=STRING
 		( gameElementLists+=GameElementList ( gameElementLists+=GameElementList)* )?
 	;
 
@@ -50,28 +50,39 @@ WeaponList returns WeaponList:
 
 Room returns Room:
 	{Room}
-	'Room' name=ID fullName=EString
-		'presentation' description=EString
+	'Room' name=ID fullName=STRING
+		'presentation' description=STRING
 		('exits'
 			exits+=Exit
 			( exits+=Exit )*
+		)?
+		('actions'
+			actions+=Action
+			( actions+=Action )*
 		)?
 	;
 
 Exit returns Exit:
 	{Exit}
 	'->'
-		description=EString
+		description=STRING
 		'with' action=EString
 		'goto' goto=[Room]
 ;
 
+Action returns Action:
+	{Action}
+	'->'
+		description=STRING
+		'with' verb=STRING
+;
+
 Monster returns Monster:
 	{Monster}
-	'monster' name=ID fullName=EString
+	'monster' name=ID fullName=STRING
 		'with' health=EInt 'health'
 		'attacks' 'for' baseDamage=EInt 'damage'
-		'with' baseWeaponName=EString
+		'with' baseWeaponName=STRING
 	;
 
 MonsterPlacement returns MonsterPlacement:
@@ -83,7 +94,7 @@ MonsterEquipment returns MonsterEquipment:
 	;
 
 Weapon returns Weapon:
-	'weapon' name=ID fullName=EString
+	'weapon' name=ID fullName=STRING
 		'attacks' 'for' damage=EInt 'damage'
 	;
 

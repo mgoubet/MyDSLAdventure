@@ -20,6 +20,7 @@ import myDSLAdventure.Exit
 import myDSLAdventure.Room
 import java.util.List
 import java.util.ArrayList
+import myDSLAdventure.Action
 
 /**
  * Generates code from your model files on save.
@@ -145,6 +146,13 @@ class ASLXGenerator extends AbstractGenerator {
 		</exit>
 	'''
 
+	def dispatch compile(Action action) '''
+		<command>
+			<pattern>«action.verb»</pattern> 
+			<script> msg ("«action.description»")</script>
+		 </command>
+	
+	'''
 
 	def dispatch compile(Room room) '''
 		  <object name="« room.name »">
@@ -160,6 +168,10 @@ class ASLXGenerator extends AbstractGenerator {
 		    </beforeenter>
 			«FOR exit : room.exits»
 				« exit.compile »
+			«ENDFOR»
+			
+			«FOR action: room.actions»
+				« action.compile »
 			«ENDFOR»
 			«FOR gameExit : gameExits.room»
 				«IF gameExit.equals(room)»
