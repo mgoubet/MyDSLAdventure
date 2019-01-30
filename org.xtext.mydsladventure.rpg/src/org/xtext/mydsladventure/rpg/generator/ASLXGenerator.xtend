@@ -194,6 +194,13 @@ class ASLXGenerator extends AbstractGenerator {
 					«ENDFOR»
 				«ENDIF»
 			«ENDFOR»
+			
+			<command> 
+				<pattern>look around</pattern>
+				<script>
+              	picture ("«projectName»/«room.name».png")
+          		</script>
+          	</command>
 		  </object>
 	'''
 
