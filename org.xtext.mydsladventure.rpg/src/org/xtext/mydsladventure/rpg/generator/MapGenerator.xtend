@@ -28,6 +28,7 @@ import java.awt.Graphics2D
 import java.awt.geom.AffineTransform
 import java.awt.Polygon
 import java.awt.geom.Line2D
+import java.awt.geom.Point2D
 
 /**
  * Generates code from your model files on save.
@@ -61,6 +62,7 @@ class MapGenerator extends AbstractGenerator {
 			for (Exit to : from.exits) {
 				var edge = new Edge(to.action, nodes.get(from.name), nodes.get(to.goto.name));
 				edge.setPadding(padding);
+				edge.setWidth(cg2d.getFontMetrics().stringWidth(to.action));
 				graph.edges.add(edge);
 			}
 		}
@@ -75,6 +77,17 @@ class MapGenerator extends AbstractGenerator {
 			var node = graph.nodes.getNode(i);
 			maxX = Math.max(maxX, node.x + node.width);
 			maxY = Math.max(maxY, node.y + node.height);
+		}
+		
+		for (var i = 0; i < graph.edges.length; i++) {
+			var edge = graph.edges.getEdge(i);
+			for (var p = 0; p < edge.points.size; p++) {
+				var point = edge.points.getPoint(p);
+				maxX = Math.max(maxX, point.x);
+				maxY = Math.max(maxY, point.y);
+			}
+			
+			maxX = Math.max(maxX, edge.points.midpoint.x + cg2d.getFontMetrics().stringWidth(edge.data as String) / 2);
 		}
 		
 		var bufferedImage = new BufferedImage(maxX + padding * 2, maxY + padding * 2, BufferedImage.TYPE_INT_ARGB);
@@ -98,8 +111,6 @@ class MapGenerator extends AbstractGenerator {
 			var edge = graph.edges.getEdge(i);
 			var path = new Path2D.Double();
 			
-			var vNodes = edge.vNodes;
-			
 			path.moveTo(edge.points.getPoint(0).x + padding, edge.points.firstPoint.y + padding);
 			for (var p = 1; p < edge.points.size; p++) {
 				var point = edge.points.getPoint(p);
@@ -112,6 +123,12 @@ class MapGenerator extends AbstractGenerator {
 			var line = new java.awt.geom.Line2D.Double();
 			line.setLine(oneToLast.x + padding, oneToLast.y + padding, edge.points.lastPoint.x + padding, edge.points.lastPoint.y + padding);
 			drawArrowHead(g2d, line);
+			
+			var dx = cg2d.getFontMetrics().stringWidth(edge.data.toString()) / 2
+			g2d.setColor(Color.white);
+			g2d.fillRoundRect(edge.points.midpoint.x - dx + padding / 2 + padding / 4, edge.points.midpoint.y + padding / 2 + 1, dx * 2 + padding / 2, 10, 5, 5);
+			g2d.setColor(Color.black);
+	    	g2d.drawString(edge.data.toString(), edge.points.midpoint.x - dx + padding, edge.points.midpoint.y + padding);
 		}
 
 	    g2d.dispose();
