@@ -45,7 +45,7 @@ class CardGenerator extends AbstractGenerator {
 	IFileSystemAccess2 filesystem;
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
-		var filename = ResourceList.getResources(Pattern.compile(".*generator/resources/templates/card\\.jpg")).get(0)
+		var filename = ResourceList.getResources(Pattern.compile(".*generator/resources/templates/card\\.png")).get(0)
 		cardTemplate = new File(filename);
 		
 		filesystem = fsa;
