@@ -38,7 +38,9 @@ class ASLXGenerator extends AbstractGenerator {
 	List<MonsterEquipment> monsterEquipments = new ArrayList<MonsterEquipment>();
 	
 	String projectName;
-	Boolean hasMonster = false;
+
+	int monstersCount = 0;
+	int weaponsCount = 0;
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 		projectName = resource.URI.trimFileExtension.segment(resource.URI.trimFileExtension.segmentCount - 1);
@@ -98,7 +100,7 @@ class ASLXGenerator extends AbstractGenerator {
 
 	
 	def dispatch compile(Monster monster) '''
-		    <object name="«monster.name»">
+		    <object name="«monster.name»_«monstersCount++»">
 	          <inherit name="editor_object" />
 	          <inherit name="multi_monster" />
 	          <visible />
@@ -116,7 +118,7 @@ class ASLXGenerator extends AbstractGenerator {
 	          <nocorpse type="boolean">false</nocorpse>
 	          <guarding/>
 	          <attackasgroup />
-	          <object name="base_attack_«monster.name»">
+	          <object name="base_attack_«monster.name»_«monstersCount»">
 	            <inherit name="editor_object" />
 	            <inherit name="monster_attack" />
 	            <damagedicenumber type="int">«monster.baseDamage»</damagedicenumber>
@@ -125,7 +127,7 @@ class ASLXGenerator extends AbstractGenerator {
 	          «FOR meq : monsterEquipments»
 	          	«IF meq.monster.equals(monster)»
 		          «meq.weapon.compile»
-  		          <object name="Weapon_«meq.weapon.name»">
+  		          <object name="Weapon_«meq.weapon.name»_«weaponsCount++»">
   		            <inherit name="editor_object" />
   		            <inherit name="monster_attack" />
                     <damagedicenumber type="int">«meq.weapon.damage»</damagedicenumber>
@@ -150,7 +152,19 @@ class ASLXGenerator extends AbstractGenerator {
 	
 	'''
 
-	def dispatch compile(Room room) '''
+	def dispatch compile(Room room) {
+		var hasMonster = false
+	    for (MonsterPlacement placement: monsterPlacements) {
+			if (placement.room.equals(room)) {
+				for (Monster monster: monsters) {
+					if (monster.equals(placement.monster)) {
+						hasMonster = true
+					}
+				}
+			}
+		}
+
+	'''
 		  <object name="« room.name »">
 		    <inherit name="editor_room" />
 		    <isroom />
@@ -162,12 +176,10 @@ class ASLXGenerator extends AbstractGenerator {
 		    <beforeenter type="script">
 		    	game.currentroom = "«room.name»"
 		    </beforeenter>
-		    «hasMonster = false»
 		    «FOR placement: monsterPlacements »
 				«IF placement.room.equals(room)»
 					«FOR monster: monsters»
 						«IF monster.equals(placement.monster)»
-							« hasMonster = true » 
 							« monster.compile »
 						«ENDIF»
 					«ENDFOR»
@@ -204,9 +216,10 @@ class ASLXGenerator extends AbstractGenerator {
           	</command>
 		  </object>
 	'''
+	}
 
 	def dispatch compile(Weapon weapon) '''
-      <object name="«weapon.name»">
+      <object name="«weapon.name»_«weaponsCount++»">
         <inherit name="editor_object" />
         <inherit name="weapon" />
         <canberusted type="boolean">false</canberusted>
