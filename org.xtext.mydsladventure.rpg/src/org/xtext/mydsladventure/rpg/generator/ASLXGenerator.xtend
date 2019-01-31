@@ -78,7 +78,9 @@ class ASLXGenerator extends AbstractGenerator {
 		</statusattributes>
 		<feature_startscript />
 		<attr name="_initialise_" type="script"> player.hitpoints = «player.healthPoints» </attr>
-	      «player.weapon.compile»
+		  «IF player.weapon !== null»
+	      	«player.weapon.compile»
+	      «ENDIF»
 	      <object name="map">
             <inherit name="editor_object" />
             <look type="script">
