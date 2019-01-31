@@ -40,6 +40,7 @@ class CardGenerator extends AbstractGenerator {
 	String resourcesPath;
 
 	File defaultMonster;
+	File defaultRoom;
 
 	List<Monster> monsters = new ArrayList<Monster>();
 	List<MonsterEquipment> monsterEquipments = new ArrayList<MonsterEquipment>();
@@ -55,6 +56,7 @@ class CardGenerator extends AbstractGenerator {
 		resourcesPath = "../src/resources/";
 
 		defaultMonster = new File(ResourceList.getResources(Pattern.compile(".*generator/resources/templates/monster\\.png")).get(0));
+		defaultRoom = new File(ResourceList.getResources(Pattern.compile(".*generator/resources/templates/room\\.png")).get(0));
 	
 		var cards = resource.allContents.filter(Game).toIterable.head.compile
 		
@@ -100,6 +102,8 @@ class CardGenerator extends AbstractGenerator {
 		var bufferedImage = ImageIO.read(cardTemplateGreen);
 
 	    var g2d = bufferedImage.createGraphics();
+	    
+	    drawCardImage(g2d, resourcesPath + "rooms/" + room.name + ".png", defaultRoom);
 	    
 	    g2d.setColor(Color.black);
 	    g2d.drawString(room.fullName, 40, 50)
