@@ -20,7 +20,7 @@ Pour avoir la carte en direct des pièces que l’on crée, il faut sauvegarder 
 Comment tester le jeu ?
 -----------------------
 
-Pour ce faire, Il faut disposer d’un ordinateur Windows ou d’une VM Windows. En effet, l'éditeur de Quest n’est disponible que sous Windows. Il faut donc installer ce dernier, en lançant le fichier .exe de Quest disponible dans le dossier Quest du projet. Enfin, il suffit de récupérer le fichier .zip qui est généré par notre DSL, de l’extraire à l’emplacement de votre choix et de lancer le fichier .aslx avec Quest puis de cliquer sur Play.
+Pour ce faire, Il faut disposer d’un ordinateur Windows ou d’une VM Windows. En effet, l'éditeur de Quest n’est disponible que sous Windows. Il faut donc installer ce dernier, en lançant le fichier .exe de Quest disponible dans le dossier Quest. Enfin, il suffit de récupérer le fichier .zip qui est généré par notre DSL, de l’extraire à l’emplacement de votre choix et de lancer le fichier .aslx avec Quest puis de cliquer sur Play.
  Si vous souhaitez, utiliser la version web de Quest, il faut quand même passer par l’éditeur sous Windows afin de publier le jeu dans un format que le site web de Quest accepte.
 
 Liste des fichiers générés
