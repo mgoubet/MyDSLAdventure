@@ -19,23 +19,46 @@ import myDSLAdventure.ExitList
 class RPGValidator extends AbstractRPGValidator {
 
 	@Check
-	def checkUniqueRoomNames(Room room) {
+	def checkUniqueRoomVerbs(Room room) {
 		
-		val roomExitNames = new ArrayList<String>();		
-		var index = 0;
+		val roomVerbs = new ArrayList<String>();
 		
 		for(exit : room.exits) {
 			
-			if(roomExitNames.contains(exit.action)) {
-				error("Duplicate action '" + exit.action+"' in room '" + room.name + "'",
-					exit, MyDSLAdventurePackage.Literals.EXIT__ACTION)
+			if(exit.action.startsWith("go ")) {
+				
+				val msg = '''Cannot start exit verb "«exit.action»" with 'go' (in room: «room.name»)'''
+				error(msg, exit, MyDSLAdventurePackage.Literals.EXIT__ACTION)
+				
+			} else if(roomVerbs.contains(exit.action)) {
+				
+				val msg = '''Duplicate exit verb "«exit.action»" (in room: «room.name»)'''
+				error(msg, exit, MyDSLAdventurePackage.Literals.EXIT__ACTION)
+				
 			} else {
-				roomExitNames.add(exit.action)
+				roomVerbs.add(exit.action)
 			}
+		}	
+
+		for(action : room.actions) {
 			
-			index++
+			if(action.verb.startsWith("go ")) {
+				
+				val msg = '''Cannot start action verb "«action.verb»" with 'go' (in room: «room.name»)'''
+				error(msg, action, MyDSLAdventurePackage.Literals.ACTION__VERB)
+				
+			} else if(roomVerbs.contains(action.verb)) {
+				
+				val msg = '''Duplicate action verb "«action.verb»" (in room: «room.name»)'''
+				error(msg, action, MyDSLAdventurePackage.Literals.ACTION__VERB)
+				
+			} else {
+				roomVerbs.add(action.verb)
+			}
 		}
 	}
+
+	
 	
 	
 	@Check
