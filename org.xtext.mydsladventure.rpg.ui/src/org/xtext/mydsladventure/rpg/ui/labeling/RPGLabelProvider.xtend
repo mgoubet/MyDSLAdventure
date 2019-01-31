@@ -15,6 +15,10 @@ import myDSLAdventure.Room
 import myDSLAdventure.Weapon
 import myDSLAdventure.Game
 import myDSLAdventure.Exit
+import myDSLAdventure.Action
+import myDSLAdventure.MonsterPlacement
+import myDSLAdventure.MonsterEquipment
+import myDSLAdventure.Player
 
 /**
  * Provides labels for EObjects.
@@ -29,19 +33,44 @@ class RPGLabelProvider extends DefaultEObjectLabelProvider {
 	}
 	
 	def text(MonsterList monsterList) {
-		"Monsters [" + monsterList.monsterStatements.filter(Monster).length + "]"
+		return '''Monsters [« monsterList.monsterStatements.filter(Monster).length »]'''
 	}
 
 	def text(WeaponList weaponList) {
-		"Weapons [" + weaponList.weapons.length + "]"
+		return '''Weapons [« weaponList.weapons.length »]'''
 	}
 	
 	def text(RoomList roomList) {
-		"Rooms [" + roomList.rooms.length + "]"
+		return '''Rooms [« roomList.rooms.length »]'''
 	}
 	
 	def text(ExitList exitList) {
-		"Exits [" + exitList.room.length + "]"
+		return '''Ends [« exitList.room.length »]'''
+	}
+	
+	def text(Exit exit) {
+		return exit.action
+	}
+	
+	def text(Action action) {
+		return action.verb
+	}
+	
+	def text(MonsterPlacement placement) {
+		return '''«placement.monster.name» in «placement.room.name»'''
+	}
+	
+	def text(MonsterEquipment equipment) {
+		return '''«equipment.monster.name» has «equipment.weapon.name»'''
+	}
+	
+	def text(Player player) {
+		
+		if(player.weapon !== null) {
+			return '''Player («player.healthPoints» HP) has «player.weapon.name» in «player.startRoom.name»'''
+		} else {
+			return '''Player («player.healthPoints» HP) in «player.startRoom.name»'''
+		}
 	}
 	
 	def image(Game game) {
