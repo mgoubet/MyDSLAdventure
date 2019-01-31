@@ -24,6 +24,8 @@ import myDSLAdventure.RoomList
 import myDSLAdventure.Room
 import java.util.StringTokenizer
 import java.awt.Graphics2D
+import java.awt.image.BufferedImage
+import org.eclipse.xtext.util.RuntimeIOException
 
 /**
  * Generates code from your model files on save.
@@ -33,14 +35,24 @@ import java.awt.Graphics2D
 class CardGenerator extends AbstractGenerator {
 	
 	File cardTemplate;
+	String resourcesPath;
+
+	File defaultMonster;
 
 	List<Monster> monsters = new ArrayList<Monster>();
 	List<MonsterEquipment> monsterEquipments = new ArrayList<MonsterEquipment>();
 	
+	IFileSystemAccess2 filesystem;
+
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 		var filename = ResourceList.getResources(Pattern.compile(".*generator/resources/templates/card\\.jpg")).get(0)
 		cardTemplate = new File(filename);
 		
+		filesystem = fsa;
+		resourcesPath = "../src/resources/";
+
+		defaultMonster = new File(ResourceList.getResources(Pattern.compile(".*generator/resources/templates/monster\\.png")).get(0));
+	
 		var cards = resource.allContents.filter(Game).toIterable.head.compile
 		
 		for (Card c : cards) {
@@ -53,6 +65,8 @@ class CardGenerator extends AbstractGenerator {
 
 	    var g2d = bufferedImage.createGraphics();
 	    
+	    drawCardImage(g2d, resourcesPath + "monsters/" + monster.name + ".png", defaultMonster);
+
 	    g2d.setColor(Color.black);
 	    g2d.drawString(monster.fullName, 40, 50)
 	    
@@ -116,6 +130,30 @@ class CardGenerator extends AbstractGenerator {
 		}
 		
 		return cards;
+	}
+	
+	def drawCardImage(Graphics2D g2d, String path, File defaultImage) {   
+		var BufferedImage image = null;
+		try {
+			var bin = filesystem.readBinaryFile(path);
+			image = ImageIO.read(bin);
+		}
+		catch(RuntimeIOException e) {
+			image = ImageIO.read(defaultImage);
+		}
+
+	    var ratio = image.width / image.height as double;
+	    var sw = 328.0;
+	    var sh = 242.0;
+	    if (ratio > (sw / sh)) {
+	    	sh = sw / ratio;
+	    } else {
+	    	sw = sh * ratio;
+	    }
+	    var sx = (36 + (328 - sw) / 2) as int;
+	    var sy = (68 + (242 - sh) / 2) as int;
+
+	    g2d.drawImage(image, sx, sy, sx + sw as int, sy + sh as int, 0, 0, image.width, image.height, null);
 	}
 	
 	def drawString(Graphics2D g2d, String text, int maxLineLength, int startX, int startY) {
