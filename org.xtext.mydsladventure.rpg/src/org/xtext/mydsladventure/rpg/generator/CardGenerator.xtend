@@ -26,6 +26,8 @@ import java.util.StringTokenizer
 import java.awt.Graphics2D
 import java.awt.image.BufferedImage
 import org.eclipse.xtext.util.RuntimeIOException
+import myDSLAdventure.Weapon
+import myDSLAdventure.WeaponList
 
 /**
  * Generates code from your model files on save.
@@ -41,6 +43,7 @@ class CardGenerator extends AbstractGenerator {
 
 	File defaultMonster;
 	File defaultRoom;
+	File defaultWeapon;
 
 	List<Monster> monsters = new ArrayList<Monster>();
 	List<MonsterEquipment> monsterEquipments = new ArrayList<MonsterEquipment>();
@@ -57,6 +60,7 @@ class CardGenerator extends AbstractGenerator {
 
 		defaultMonster = new File(ResourceList.getResources(Pattern.compile(".*generator/resources/templates/monster\\.png")).get(0));
 		defaultRoom = new File(ResourceList.getResources(Pattern.compile(".*generator/resources/templates/room\\.png")).get(0));
+		defaultWeapon = new File(ResourceList.getResources(Pattern.compile(".*generator/resources/templates/weapon\\.png")).get(0));
 	
 		var cards = resource.allContents.filter(Game).toIterable.head.compile
 		
@@ -108,7 +112,7 @@ class CardGenerator extends AbstractGenerator {
 	    g2d.setColor(Color.black);
 	    g2d.drawString(room.fullName, 40, 50)
 	    
-	    drawString(g2d, room.description, 45, 40, 370)
+	    drawString(g2d, room.description, 40, 40, 370)
 
 	    g2d.dispose();
 	    
@@ -116,6 +120,26 @@ class CardGenerator extends AbstractGenerator {
 	    ImageIO.write(bufferedImage, "png", baos);
 	    	    
 	    return  Arrays.asList(Card.fromByteArray(baos.toByteArray(), room.name));
+	}
+	
+	def compile(Weapon weapon) {
+		var bufferedImage = ImageIO.read(cardTemplateBlue);
+
+	    var g2d = bufferedImage.createGraphics();
+	    
+	    drawCardImage(g2d, resourcesPath + "weapons/" + weapon.name + ".png", defaultWeapon);
+	    
+	    g2d.setColor(Color.black);
+	    g2d.drawString(weapon.fullName, 40, 50)
+	    
+	    g2d.drawString("Damage : " + weapon.damage + " D4", 40, 370)
+
+	    g2d.dispose();
+	    
+	    var baos = new ByteArrayOutputStream();
+	    ImageIO.write(bufferedImage, "png", baos);
+	    	    
+	    return  Arrays.asList(Card.fromByteArray(baos.toByteArray(), weapon.name));
 	}
 	
 	def compile(Game game) {
@@ -133,6 +157,12 @@ class CardGenerator extends AbstractGenerator {
 		for (RoomList list : game.gameElementLists.filter(RoomList).toList()) {
 			for (Room room : list.rooms.toList()) {
 				cards.addAll(room.compile)
+			}
+		}
+		
+		for (WeaponList list : game.gameElementLists.filter(WeaponList).toList()) {
+			for (Weapon weapon : list.weapons.toList()) {
+				cards.addAll(weapon.compile)
 			}
 		}
 		
@@ -166,21 +196,21 @@ class CardGenerator extends AbstractGenerator {
 	def drawString(Graphics2D g2d, String text, int maxLineLength, int startX, int startY) {
 		var formated = addLinebreaks(text, maxLineLength)
 		var count = 0
-		for (String line : formated.split("\n")) {
+		for (String line : formated.split('\n')) {
 	    	g2d.drawString(line, startX, startY + count * 12)
 	    	count++	
 		}
 	}
 
 	def addLinebreaks(String input, int maxLineLength) {
-	    var tok = new StringTokenizer(input, " ");
+	    var tok = new StringTokenizer(input, " \n");
 	    var output = new StringBuilder(input.length());
 	    var lineLen = 0;
 	    while (tok.hasMoreTokens()) {
 	        var word = tok.nextToken();
 	
 	        if (lineLen + word.length() > maxLineLength) {
-	            output.append("\n");
+	            output.append('\n');
 	            lineLen = 0;
 	        }
 	        output.append(word + " ");
