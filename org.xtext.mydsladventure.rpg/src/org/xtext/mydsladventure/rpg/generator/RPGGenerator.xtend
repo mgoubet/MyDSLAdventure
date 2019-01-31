@@ -19,6 +19,7 @@ class RPGGenerator extends AbstractGenerator {
 		(new ASLXGenerator()).doGenerate(resource, fsa, context);
 		(new CardGenerator()).doGenerate(resource, fsa, context);
 		(new MapGenerator()).doGenerate(resource, fsa, context);
+		(new ZipGenerator()).doGenerate(resource, fsa, context);
 	}
 	
 }
