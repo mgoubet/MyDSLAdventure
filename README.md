@@ -26,9 +26,10 @@ Pour ce faire, Il faut disposer d’un ordinateur Windows ou d’une VM Windows.
 Liste des fichiers générés
 --------------------------
 
-Pour chaque fichier <game>.rpg, le projet génère un certain nombre de fichiers dans le dossier src-gen/ du projet Eclipse courant :
-* <game>.aslx  :  le jeu généré pour l’éditeur Quest
-* <game>_map.png : une carte du jeu avec les Rooms et connections entre celles-ci
-* <game>/<room id>.png : une carte décrivant la pièce de nom <room id>
-* <game>/<monster id>.png : idem pour le monstre <monster id>
-* <game>.zip : un zip de tous les fichiers générés et toutes les dépendances du jeu, prêt à être ouvert par Quest.
+Pour chaque fichier [game].rpg, le projet génère un certain nombre de fichiers dans le dossier src-gen/ du projet Eclipse courant :
+* [game].aslx  :  le jeu généré pour l’éditeur Quest
+* [game]_map.png : une carte du jeu avec les Rooms et connections entre celles-ci
+* [game]/[room id].png : une carte décrivant la pièce de nom [room id]
+* [game]/[monster id].png : idem pour le monstre [monster id]
+* [game]/[weapon id].png : idem pour le monstre [weapon id]
+* [game].zip : un zip de tous les fichiers générés et toutes les dépendances du jeu, prêt à être ouvert par Quest.
