@@ -228,6 +228,9 @@ class ASLXGenerator extends AbstractGenerator {
         <alias>«weapon.fullName»</alias>
         <notindescription type="boolean">false</notindescription>
         <destroyonsale type="boolean">false</destroyonsale>
+        <look type="script">
+          picture ("«projectName»/«weapon.name».png")
+        </look>
       </object>
     '''
 	
