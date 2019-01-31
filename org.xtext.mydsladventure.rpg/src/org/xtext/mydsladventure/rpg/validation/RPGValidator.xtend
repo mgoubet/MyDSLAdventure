@@ -10,6 +10,7 @@ import myDSLAdventure.MyDSLAdventurePackage
 import myDSLAdventure.Game
 import myDSLAdventure.Player
 import myDSLAdventure.ExitList
+import myDSLAdventure.Monster
 
 /**
  * This class contains custom validation rules. 
@@ -63,6 +64,14 @@ class RPGValidator extends AbstractRPGValidator {
 		if(player.healthPoints < 1) {
 			val msg = "The player health must be strictly positive"
 			error(msg, player, MyDSLAdventurePackage.Literals.PLAYER__HEALTH_POINTS)
+		}
+	}
+	
+	@Check
+	def checkPositiveMonsterHealh(Monster monster) {
+		if(monster.health < 1) {
+			val msg = "The monster health must be strictly positive"
+			error(msg, monster, MyDSLAdventurePackage.Literals.MONSTER__HEALTH)
 		}
 	}
 	
