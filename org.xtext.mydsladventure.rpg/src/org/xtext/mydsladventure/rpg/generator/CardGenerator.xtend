@@ -35,6 +35,8 @@ import org.eclipse.xtext.util.RuntimeIOException
 class CardGenerator extends AbstractGenerator {
 	
 	File cardTemplate;
+	File cardTemplateBlue;
+	File cardTemplateGreen;
 	String resourcesPath;
 
 	File defaultMonster;
@@ -45,8 +47,9 @@ class CardGenerator extends AbstractGenerator {
 	IFileSystemAccess2 filesystem;
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
-		var filename = ResourceList.getResources(Pattern.compile(".*generator/resources/templates/card\\.png")).get(0)
-		cardTemplate = new File(filename);
+		cardTemplate = new File(ResourceList.getResources(Pattern.compile(".*generator/resources/templates/card\\.png")).get(0));
+		cardTemplateBlue = new File(ResourceList.getResources(Pattern.compile(".*generator/resources/templates/card_blue\\.png")).get(0));
+		cardTemplateGreen = new File(ResourceList.getResources(Pattern.compile(".*generator/resources/templates/card_green\\.png")).get(0));
 		
 		filesystem = fsa;
 		resourcesPath = "../src/resources/";
@@ -94,7 +97,7 @@ class CardGenerator extends AbstractGenerator {
 	}
 	
 	def compile(Room room) {
-		var bufferedImage = ImageIO.read(cardTemplate);
+		var bufferedImage = ImageIO.read(cardTemplateGreen);
 
 	    var g2d = bufferedImage.createGraphics();
 	    
