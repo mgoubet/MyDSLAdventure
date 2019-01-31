@@ -57,8 +57,14 @@ class RPGValidator extends AbstractRPGValidator {
 			}
 		}
 	}
-
 	
+	@Check
+	def checkPositivePlayerHealh(Player player) {
+		if(player.healthPoints < 1) {
+			val msg = "The player health must be strictly positive"
+			error(msg, player, MyDSLAdventurePackage.Literals.PLAYER__HEALTH_POINTS)
+		}
+	}
 	
 	
 	@Check
