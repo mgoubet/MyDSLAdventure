@@ -7,6 +7,9 @@ import java.util.ArrayList
 import org.eclipse.xtext.validation.Check
 import myDSLAdventure.Room
 import myDSLAdventure.MyDSLAdventurePackage
+import myDSLAdventure.Game
+import myDSLAdventure.Player
+import myDSLAdventure.ExitList
 
 /**
  * This class contains custom validation rules. 
@@ -31,6 +34,46 @@ class RPGValidator extends AbstractRPGValidator {
 			}
 			
 			index++
+		}
+	}
+	
+	
+	@Check
+	def checkSingleEndsAndPlayer(Game game) {
+		 
+		var hasPlayer = false
+		var hasEnds = false
+		var index = 0
+		
+		for(gameElementList : game.gameElementLists) {
+			
+			if(gameElementList instanceof Player) {
+				if(hasPlayer) {
+					val msg =  "Too many Player declarations (exactly one required)"
+					error(msg, game, MyDSLAdventurePackage.Literals.GAME__GAME_ELEMENT_LISTS, index)
+				} else {
+					hasPlayer = true
+				}
+			} else if(gameElementList instanceof ExitList) {
+				if(hasEnds) {
+					val msg = "Too many Ends declarations (exactly one required)"
+					error(msg, game, MyDSLAdventurePackage.Literals.GAME__GAME_ELEMENT_LISTS, index)
+				} else {
+					hasEnds = true
+				}
+			}
+			
+			index++	
+		}
+		
+		if(!hasEnds) {
+			val msg = "Missing Ends declaration (exactly one required)"
+			error(msg, game, MyDSLAdventurePackage.Literals.GAME__GAME_TITLE)
+		}
+		
+		if(!hasPlayer) {
+			val msg = "Missing Player declaration (exactly one required)"
+			error(msg, game, MyDSLAdventurePackage.Literals.GAME__GAME_TITLE)
 		}
 	}
 }
