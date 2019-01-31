@@ -17,6 +17,8 @@ import java.util.List
 import java.util.ArrayList
 import myDSLAdventure.RoomList
 import myDSLAdventure.Room
+import myDSLAdventure.Weapon
+import myDSLAdventure.WeaponList
 
 /**
  * Generates code from your model files on save.
@@ -39,6 +41,7 @@ class ZipGenerator extends AbstractGenerator {
 		
 		var List<Monster> monsters = new ArrayList();
 		var List<Room> rooms = new ArrayList();
+		var List<Weapon> weapons = new ArrayList();
 		
 		for (MonsterList list : game.gameElementLists.filter(MonsterList).toList()) {
 			monsters.addAll(list.monsterStatements.filter(Monster).toList());
@@ -46,6 +49,10 @@ class ZipGenerator extends AbstractGenerator {
 		
 		for (RoomList list : game.gameElementLists.filter(RoomList).toList()) {
 			rooms.addAll(list.rooms.filter(Room).toList());
+		}
+		
+		for (WeaponList list : game.gameElementLists.filter(WeaponList).toList()) {
+			weapons.addAll(list.weapons.filter(Weapon).toList());
 		}
 		
 		for (Monster m : monsters) {
@@ -61,6 +68,15 @@ class ZipGenerator extends AbstractGenerator {
 			try {
 				var bin = fsa.readBinaryFile(gameName + "/" + r.name + ".png");
 				zipFile.addFileFromStream(gameName + "/" + r.name + ".png", bin);
+			}
+			catch(RuntimeIOException e) {
+			}
+		}
+		
+		for (Weapon w : weapons) {
+			try {
+				var bin = fsa.readBinaryFile(gameName + "/" + w.name + ".png");
+				zipFile.addFileFromStream(gameName + "/" + w.name + ".png", bin);
 			}
 			catch(RuntimeIOException e) {
 			}
